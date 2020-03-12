@@ -1,4 +1,4 @@
- #include "opencv2/opencv.hpp"
+#include "opencv2/opencv.hpp"
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
@@ -227,6 +227,12 @@ Arquivo::Arquivo(string path, string nomeArq){
 	InicioJson("dados");
 }
 
+double TemposGravacao(auto fim, auto inicio){
+	double tempoDecorrido = std::chrono::duration_cast<std::chrono::microseconds>(fim - inicio).count();
+	
+	return tempoDecorrido;
+	}
+
 sem_t sen, cam;
 pthread_mutex_t mutex1;
 auto start = high_resolution_clock::now();
@@ -337,9 +343,38 @@ void* chamadaCamera(void* arg){
 	arqCamera.FimJson();
 	* */
 	printf("Gravando...");
+	double tempoGravacao[quantidadeFrames];
 	for(int i = 0; i < frames.size(); i++){
+		
+		auto inicio = std::chrono::high_resolution_clock::now();
 		imwrite(path + to_string(i) + ".jpg" ,frames[i]); 
+		auto fim = std::chrono::high_resolution_clock::now();
+		//cout << TemposGravacao(fim,inicio) << endl;
+		tempoGravacao[i] = TemposGravacao(fim,inicio);
+		
 	}
+	
+	double soma = 0;
+	double dp = 0;
+    for(int i = 0;i<100;i++){
+
+		cout << tempoGravacao[i] << endl;
+        soma = soma + tempoGravacao[i];
+        
+    }
+        
+    double media = (soma/100);
+    for(int j = 0; j < 100; j++){
+		
+        dp += pow((tempoGravacao[j] - media),2);
+        
+    }
+        
+    dp = dp/100;
+    dp = sqrt(dp);
+    cout << "media: " << media << endl;
+    cout << "Desvio P.: " << dp << endl;
+    
 	pthread_mutex_unlock(&mutex1);
 	sem_post(&sen);
 	flagCam = 1;
