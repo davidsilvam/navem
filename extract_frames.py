@@ -1,13 +1,13 @@
 import cv2
 import os
 
-video_name = "2020_05_31-17_44_57"
+video_name = "2020_06_29-19_33_39"
 video_directory = "./../raw_datasets_videos"
 images_directory = "./../raw_datasets_images"
 
 if not os.path.exists(os.path.join(images_directory, video_name)):
     os.makedirs(os.path.join(images_directory, video_name))
-    print("Path ", os.path.join(images_directory, video_name), "created.")
+    print("Path", os.path.join(images_directory, video_name), "created.")
 else:
     print("Directory already exist.")
 

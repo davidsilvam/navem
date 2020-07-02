@@ -6,7 +6,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-video_name = "2020_05_31-17_44_57"
+begin = 1
+end = 200
+
+video_name = "2020_06_29-19_33_39"
 video_directory = "./../raw_datasets_videos"
 images_directory = "./../raw_datasets_images"
 
@@ -151,7 +154,7 @@ df_acc = fill(accJson, "accelerations")
 df_gyro = fill(gyroJson, "rotations")
 df_cam = fill(camJson, "frames")
 
-getLabels(df_gyro, df_acc, df_cam, 50, 100, 8, 50, 1)
+getLabels(df_gyro, df_acc, df_cam, begin, end, 8, 50, 1)
 
 
 ##acc = moving_avg(turnReferenceTime(df_acc), 50)

@@ -20,7 +20,7 @@ if not os.path.exists(os.path.join(dataset_directory, dataset_name)):
 else:
     print("Directory already exist.")
 
-if not os.path.isfile(os.path.exists(os.path.join(dataset_directory, dataset_name + ".txt"))):
+if not os.path.isfile(os.path.join(dataset_directory, dataset_name + ".txt")):
     dataset_file = open(os.path.join(dataset_directory, dataset_name + ".txt"), "w+")
     print("File", os.path.join(dataset_directory, dataset_name + ".txt"), "created.")
 else:
