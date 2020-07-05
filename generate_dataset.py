@@ -7,7 +7,7 @@ import cv2 as cv
 import os
 
 dataset_directory = "./../datasets"
-o_dataset_name = "all_dataset"
+o_dataset_name = "all_dataset_nstd"
 network = "vgg16"
 
 dim = (224, 224)
@@ -15,8 +15,8 @@ dim = (224, 224)
 resize = False#Must be True always, False is exception
 repeted = False
 round_sample = -1
-dataset_name = "all_dataset_cn"
-dataset_name_case = "all_dataset"
+dataset_name = "all_dataset_nstd"
+dataset_name_case = "all_dataset_nstd"
 
 if not os.path.exists(os.path.join(dataset_directory, network, o_dataset_name)):
     os.makedirs(os.path.join(dataset_directory, network, o_dataset_name))

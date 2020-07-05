@@ -7,15 +7,16 @@ import seaborn as sns
 ##import pylab as pl
 
 dataset_directory = "./../datasets"
-o_dataset_name = "sidewalk"
+o_dataset_name = "all_dataset"
 
 data = pd.read_csv(os.path.join(dataset_directory, o_dataset_name + ".txt"), sep=" ", engine="python", encoding="ISO-8859-1", header=None).values
 
 ##norm_m = (data[:,2] - np.mean(data[:,2]))/np.std(data[:,2])#normalize (x - media) / desvio padrao
 ##norm = (data[:,2]-data[:,2].min())/(data[:,2].max()-data[:,2].min())
-d = data[:,2]
-d1 = (data[:,2]-data[:,2].min())/(data[:,2].max()-data[:,2].min())
-d2 = (data[:,2] - np.mean(data[:,2]))/np.std(data[:,2])#normalize (x - media) / desvio padrao
+col = 1
+d = data[:,col]
+d1 = (data[:,col]-data[:,col].min())/(data[:,col].max()-data[:,col].min())
+d2 = (data[:,col] - np.mean(data[:,col]))/np.std(data[:,col])#normalize (x - media) / desvio padrao
 
 ##plt.hist(d, 30, alpha=0.5, edgecolor='black', color='red', linewidth=1.2, label='Raw data')
 ##plt.plot()

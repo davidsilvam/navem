@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 #dronet = ["exp_001", "exp_002"]
-vgg16 = ["exp_015", "exp_016", "exp_017", "exp_019"]#side, inner, external
+vgg16 = ["exp_022"]#side, inner, external
 names = ["vgg16 - all dataset - data augmentation"]
 exp_name = vgg16
 #data = pd.read_csv("/home/david/Área de Trabalho/navem_keras/experiments/" + exp_name + "/log.txt", sep="\t", engine="python", encoding="ISO-8859-1", header=None)

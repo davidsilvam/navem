@@ -33,6 +33,7 @@ import libnavem.logz as logz
 
 #python3 cnn_regression.py --exp_name="exp_001" --dataset="dataset_cel_log_resized_200_200_gray" --img_mode="rgb" --batch_size=64
 #python3 cnn_regression.py --exp_name="exp_004" --dataset="dataset_navem_224_224" --img_mode="rgb" --batch_size=64
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-9.0/lib64
 
 def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
 
