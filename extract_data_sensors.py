@@ -6,10 +6,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-begin = 2171
-end = 3100
+begin = 250
+end = 3385
 
-video_name = "2020_06_25-14_22_19"
+video_name = "2020_06_25-14_14_59"
 video_directory = "./../raw_datasets_videos"
 images_directory = "./../raw_datasets_images"
 

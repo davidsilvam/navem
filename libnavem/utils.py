@@ -5,6 +5,8 @@ import numpy as np
 import tensorflow as tf
 
 from keras.models import model_from_json
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 #inico_teste
 from keras import backend as K

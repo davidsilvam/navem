@@ -4,10 +4,17 @@ import matplotlib.pyplot as plt
 import os
 
 #dronet = ["exp_001", "exp_002"]
-vgg16 = ["exp_022"]#side, inner, external
-names = ["vgg16 - all dataset - data augmentation"]
+#"exp_020", "exp_021"
+#"exp_022", "exp_023", "exp_024"
+#"exp_025"
+#"exp_026"
+#
+vgg16 = ["exp_032"]#side, inner, external
+names = ["vgg16"]
 exp_name = vgg16
 #data = pd.read_csv("/home/david/Área de Trabalho/navem_keras/experiments/" + exp_name + "/log.txt", sep="\t", engine="python", encoding="ISO-8859-1", header=None)
+
+#plt.ylim(-2, 2)
 
 for exp, name in zip([vgg16], names):
     plt.figure("vgg16")
@@ -23,7 +30,7 @@ for exp, name in zip([vgg16], names):
         timesteps = list(range(train_loss.shape[0]))
         plt.title(name)
         plt.subplot(len(exp_name), 1, i[0] + 1)
-
+        #plt.ylim(0, 0.05)
         # Plot losses
         plt.plot(timesteps, train_loss, 'r-', timesteps, val_loss, 'b-')
         plt.legend(["Training loss", "Validation loss"])

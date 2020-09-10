@@ -3,13 +3,14 @@ import json
 import cv2 as cv
 import shutil
 
-labels_name = "labels_50_100"
-dataset_name = "sidewalk"
-video_name = "2020_05_31-17_44_57"
+labels_name = "labels_250_3385"
+dataset_name = "new_sidewalk"
+video_name = "2020_06_25-14_14_59"
 video_directory = "./../raw_datasets_videos"
 images_directory = "./../raw_datasets_images"
 dataset_directory = "./../datasets"
 
+print(labels_name)
 f = open(os.path.join(video_directory, video_name, labels_name + ".txt"))
 ##f = open(str(directory[:-2]) + "/" + "_labels_n.txt")
 ##dataset_file = open("/home/david/Área de Trabalho/navem_keras/arquivos/Bando de dados Mestrado/dataset_navem_novo/all_dataset.txt","r+")
@@ -33,23 +34,25 @@ else:
 f_ini = len(dataset_file.readlines())
 for i in f:
     if(f_ini < 10):
+        #print("00000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
+        #a = input()
         shutil.copyfile(os.path.join(images_directory, video_name, i.split(" ")[0][:]), os.path.join(dataset_directory, dataset_name, "00000" + str(f_ini) + ".jpg" ))
-        dataset_file.write("00000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + " ".join(i.split(" ")[1:]))
+        dataset_file.write("00000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
     elif(f_ini < 100):
         shutil.copyfile(os.path.join(images_directory, video_name, i.split(" ")[0][:]), os.path.join(dataset_directory, dataset_name, "0000" + str(f_ini) + ".jpg" ))
-        dataset_file.write("0000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + " ".join(i.split(" ")[1:]))
+        dataset_file.write("0000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
     elif(f_ini < 1000):
         shutil.copyfile(os.path.join(images_directory, video_name, i.split(" ")[0][:]), os.path.join(dataset_directory, dataset_name, "000" + str(f_ini) + ".jpg" ))
-        dataset_file.write("000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + " ".join(i.split(" ")[1:]))
+        dataset_file.write("000" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
     elif(f_ini < 10000):
         shutil.copyfile(os.path.join(images_directory, video_name, i.split(" ")[0][:]), os.path.join(dataset_directory, dataset_name, "00" + str(f_ini) + ".jpg" ))
-        dataset_file.write("00" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + " ".join(i.split(" ")[1:]))
+        dataset_file.write("00" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
     elif(f_ini < 100000):
         shutil.copyfile(os.path.join(images_directory, video_name, i.split(" ")[0][:]), os.path.join(dataset_directory, dataset_name, "0" + str(f_ini) + ".jpg" ))
-        dataset_file.write("0" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + " ".join(i.split(" ")[1:]))
+        dataset_file.write("0" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
     else:
         shutil.copyfile(os.path.join(images_directory, video_name, i.split(" ")[0][:]), os.path.join(dataset_directory, dataset_name, str(f_ini) + ".jpg" ))
-        dataset_file.write("" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + " ".join(i.split(" ")[1:]))
+        dataset_file.write("" + str(f_ini) + ".jpg" + " " + i.split(" ")[0][:] + " " + video_name + " " + " ".join(i.split(" ")[1:]))
     f_ini+=1
 dataset_file.close()
 print('Finalizou')
