@@ -3,9 +3,9 @@ import json
 import cv2 as cv
 import shutil
 
-labels_name = "labels_250_3385"
-dataset_name = "new_sidewalk"
-video_name = "2020_06_25-14_14_59"
+labels_name = "labels_50_3501"
+dataset_name = "2020_06_25-16_49_23"#new_sidewalk
+video_name = "2020_06_25-16_49_23"
 video_directory = "./../raw_datasets_videos"
 images_directory = "./../raw_datasets_images"
 dataset_directory = "./../datasets"

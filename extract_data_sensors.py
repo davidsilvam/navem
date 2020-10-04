@@ -6,10 +6,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-begin = 250
-end = 3385
+begin = 50
+end = 3501
 
-video_name = "2020_06_25-14_14_59"
+video_name = "2020_06_25-16_49_23"
 video_directory = "./../raw_datasets_videos"
 images_directory = "./../raw_datasets_images"
 
@@ -144,17 +144,18 @@ def getLabels(arrayGyro, arrayAcc, arrayCam, begin, end, n_avg_gyro, n_avg_acc, 
         if(gyro_aux.shape[0] > n_avg_gyro - 1):
             gyro_aux = moving_avg(gyro_aux, n_avg_gyro)
             acc_aux = moving_avg(acc_aux, n_avg_gyro, axis="x")
-            print(sample, max(gyro_aux['y'], key=abs)*-1, stepsBySeconds(acc, acc['time_usec'][time_begin], 1.5), max(gyro_aux['x'], key=abs)*-1)#Terminou
-##            print(sample, max(gyro_aux['y'], key=abs)*-1)
+            #print(sample, max(gyro_aux['y'], key=abs)*-1, stepsBySeconds(acc, acc['time_usec'][time_begin], 1.5), max(gyro_aux['x'], key=abs)*-1)#Terminou
+#            print(sample, max(gyro_aux['y'], key=abs)*-1)
+            print(str(sample) + ".jpg" + " " + str(max(gyro_aux['y'], key=abs)*-1) + " " + str(stepsBySeconds(acc, acc['time_usec'][time_begin], 1.5)) + " " +  str(max(gyro_aux['x'], key=abs)*-1))
             labels.write(str(sample) + ".jpg" + " " + str(max(gyro_aux['y'], key=abs)*-1) + " " + str(stepsBySeconds(acc, acc['time_usec'][time_begin], 1.5)) + " " +  str(max(gyro_aux['x'], key=abs)*-1) + "\n")
     labels.close()
     print("Finish")
-                
+
 df_acc = fill(accJson, "accelerations")
 df_gyro = fill(gyroJson, "rotations")
 df_cam = fill(camJson, "frames")
 
-getLabels(df_gyro, df_acc, df_cam, begin, end, 8, 50, 3)
+getLabels(df_gyro, df_acc, df_cam, begin, end, 8, 50, 1)#step=3
 
 
 ##acc = moving_avg(turnReferenceTime(df_acc), 50)

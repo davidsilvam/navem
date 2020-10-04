@@ -1,4 +1,4 @@
-import numpy as np
+###Não é necessárioimport numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from shutil import copyfile
@@ -7,7 +7,7 @@ import cv2 as cv
 import os
 
 dataset_directory = "./../datasets"
-o_dataset_name = "sidewalk_accy_proportion"
+o_dataset_name = "2020_06_25-16_49_23"
 network = "vgg16"
 
 dim = (224, 224)
@@ -15,8 +15,8 @@ dim = (224, 224)
 resize = True#Must be True always, False is exception
 repeted = True
 round_sample = -1
-dataset_name = "sidewalk_accy_proportion"
-dataset_name_case = "sidewalk_accy_proportion"
+dataset_name = "2020_06_25-16_49_23"
+dataset_name_case = "2020_06_25-16_49_23"
 
 if not os.path.exists(os.path.join(dataset_directory, network, o_dataset_name)):
     os.makedirs(os.path.join(dataset_directory, network, o_dataset_name))
@@ -32,9 +32,7 @@ min_max_array = []
 def getMinMax(array, col):
     return [data[:,col].min(), data[:,col].max()]
 
-min_max_array.append(getMinMax(data, 3))#acc_y. Muste be 2, or others
-print(min_max_array)
-os.system('pause')
+min_max_array.append(getMinMax(data, 1))#acc_y. Muste be 2, or others
 
 #Normalization
 #data[:,1] = (data[:,1]-data[:,1].min())/(data[:,1].max()-data[:,1].min())#Nomalize de 0 a 1
@@ -43,14 +41,17 @@ os.system('pause')
 ##data[:,2] = data[:,2].astype(float)
 data[:,3] = (data[:,3]-data[:,3].min())/(data[:,3].max()-data[:,3].min())#Nomalize
 
-trainingSet, testSet = train_test_split(data, test_size=0.3)
+#trainingSet, testSet = train_test_split(data, test_size=0.3)
+testSet = data.copy()
+trainingSet = pd.DataFrame().values
+
 
 src = os.path.join(dataset_directory, o_dataset_name)
 dst = os.path.join(dataset_directory, network, o_dataset_name)
 
 folders = ["train", "val"]
 
-trainingSet = trainingSet[trainingSet[:,0].argsort()]
+#trainingSet = trainingSet[trainingSet[:,0].argsort()]
 testSet = testSet[testSet[:,0].argsort()]
 
 sets = [trainingSet, testSet]
@@ -91,12 +92,12 @@ def elemEqualsSet(name, dataset, lis):
     for col in ["gyro"]:
         for sample in min_max_array:
                 log.write(col + ":" + str(sample))
-                        
+
 ##      log.write("min pedo" + " " + str(data[:,2].min()))
 ##      log.write("max pedo" + " " + str(data[:,2].max()))
     log.close()
 
-print(trainingSet)
+#print(trainingSet)
 print(testSet)
 
 programPause = input("Press the <ENTER> key to continue save train and test...")
@@ -113,7 +114,7 @@ for folder in zip(folders, sets):
                     resized = cv.resize(img, dim, interpolation = cv.INTER_AREA)
                     cv.imwrite(os.path.join(dst_dataset_name, folder[0], dataset_name_case, "images/", sample[0]), resized)
                 else:
-                    cv.imwrite(os.path.join(dst_dataset_name, folder[0], dataset_name_case, "images/", sample[0]), img)                
+                    cv.imwrite(os.path.join(dst_dataset_name, folder[0], dataset_name_case, "images/", sample[0]), img)
 #                               print(dst_dataset_name + "/" + folder[0] + "/" + sample[0])
                 if(folder[0] == "train"):
                     if(round_sample == -1):

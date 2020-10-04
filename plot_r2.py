@@ -10,14 +10,14 @@ from sklearn.metrics import r2_score
 
 #predict_truth_train_model_weights_399.h5_0_
 phase = "test"
-set = "val"
-exp = "exp_030"
-name_weights = "model_weights_179.h5"
+set = "train"
+exp = "exp_037"
+name_weights = "model_weights_499.h5"
 
 if(phase == "train"):
-    name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_model_" + name_weights + "_1_" + '.txt')
+    name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_1_" + '.txt')
 else:
-    name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_model_" + name_weights + "_0_" + '.txt')
+    name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_0_" + '.txt')
 
 df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
 
@@ -34,6 +34,8 @@ ax.scatter(df['real'], df['pred'], edgecolor='k', facecolor='grey', alpha=0.7, l
 
 ax.set_ylabel('predict', fontsize=14)
 ax.set_xlabel('real', fontsize=14)
+# ax.set_xlim([0,1])
+# ax.set_ylim([0,1])
 
 ax.text(0.8, 0.1, 'aegis4048.github.io', fontsize=13, ha='center', va='center',
          transform=ax.transAxes, color='grey', alpha=0.5)
