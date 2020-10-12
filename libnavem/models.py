@@ -26,7 +26,7 @@ def getModel(img_width, img_height, img_channels, output_dim, weights_path):
     # Returns
        model: A Model instance.
     """
-    model = resnet8(img_width, img_height, img_channels, output_dim=output_dim)
+    model = resnet8(img_width, img_height, img_channels, output_dim=output_dim) #change model from train resnet or vgg16
     print("\n\n\n" + weights_path + "\n\n\n")
     a = input("ante de get")
     if weights_path:

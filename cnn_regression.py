@@ -29,11 +29,11 @@ import libnavem.log_utils as log_utils
 import libnavem.logz as logz
 import keras
 
-#from libnavem.cnn_models import create_cnn
+# from libnavem.cnn_models import create_cnn
 
-#python3 cnn_regression.py --exp_name="exp_001" --dataset="dataset_cel_log_resized_200_200_gray" --img_mode="rgb" --batch_size=64
-#python3 cnn_regression.py --exp_name="exp_004" --dataset="dataset_navem_224_224" --img_mode="rgb" --batch_size=64
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.0/lib64
+# python3 cnn_regression.py --exp_name="exp_001" --dataset="dataset_cel_log_resized_200_200_gray" --img_mode="rgb" --batch_size=64
+# python3 cnn_regression.py --exp_name="exp_004" --dataset="dataset_navem_224_224" --img_mode="rgb" --batch_size=64
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.0/lib64
 
 def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
 
@@ -49,7 +49,7 @@ def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
 	##model.compile(loss="mean_squared_error", optimizer=opt)
 	optimizer = optimizers.Adam(decay=1e-5)
 	# Configure training process
-	model.compile(loss="mean_squared_error", optimizer=optimizer)
+	model.compile(loss="mean_squared_error", optimizer=optimizer) # from regress use "mean_squared_error"; from classfifier use "categorical_crossentropy" => also metrics=['accuracy']
 	##loss=keras.losses.categorical_crossentropy
 
 	# Save model with the lowest validation loss
@@ -82,9 +82,9 @@ def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
 
 	##hist_df = pd.DataFrame(history.history)
 
-	hist_csv_file = os.path.join("./experiments/" + FLAGS.exp_name, 'history.csv')#Parou aqui
-	with open(hist_csv_file, mode='w') as f:
-		hist_df.to_csv(f)
+	# hist_csv_file = os.path.join("./experiments/" + FLAGS.exp_name, 'history.csv')#Parou aqui
+	# with open(hist_csv_file, mode='w') as f:
+	# 	hist_df.to_csv(f)
 
 def main(argv):
 	if not os.path.exists("./experiments/" + FLAGS.exp_name):

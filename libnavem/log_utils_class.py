@@ -4,8 +4,6 @@ import numpy as np
 import keras
 from keras import backend as K
 
-
-
 class MyCallback(keras.callbacks.Callback):
     """
     Customized callback class.

@@ -6,14 +6,14 @@ import os
 # videofiles = [n for n in os.listdir('.') if n[0]=='c' and n[-4:]=='.mp4']
 # videofiles = sorted(videofiles, key=lambda item: int( item.partition('.')[0][3:]))
 
-video_name = '2020_06_25-14_14_59'
+video_name = '2020_06_25-16_49_23'
 path = os.path.join('./../')
 
 videofiles = [n for n in os.listdir(path) if n[-4:] == '.avi']
 
 print(videofiles)
 
-videofiles = sorted(videofiles, key=lambda item: int( item.partition('.')[0][-4:]))
+videofiles = sorted(videofiles, key=lambda item: int(item.partition('.')[0][-4:]))
 
 for i in range(len(videofiles)):
     videofiles[i] = os.path.join(path, videofiles[i])

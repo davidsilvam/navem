@@ -5,16 +5,18 @@ import os
 import pandas as pd
 
 image_name = "2020_06_25-14_14_59"
-exp = "exp_035"
+exp_accx = "exp_035"
+exp_accy = "exp_040"
+exp_psi = "exp_042"
 
-start_frame = 4195
-end_frame = 5345
+start_frame = 0
+end_frame = 10
 
 image_dir = os.path.join("./../datasets", image_name, "*.jpg")
 video_dir = os.path.join('./../project_' + str(start_frame) + '_' + str(end_frame) + '.avi')
 
-name = os.path.join('./../experiments', exp, image_name + ".txt")
-df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
+name_accx = os.path.join('./../experiments', exp_accx, image_name + ".txt")
+df_accx = pd.read_csv(name_accx, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
 
 img_array = []
 # \param c maximun frames
@@ -39,10 +41,10 @@ for filename in glob.glob(image_dir):
     # print(int(filename.split('\\')[s - 1].split('.')[0]))
 
     current = int(filename.split('\\')[s - 1].split('.')[0])
-    print("%.2f%% of images was processed. Current %d" % (100 * current / df.shape[0], current))
+    print("%.2f%% of images was processed. Current %d" % (100 * current / df_accx.shape[0], current))
 
     if(current > start_frame):
-        r = df.iloc[index_df]['pred']
+        r = df_accx.iloc[index_df]['pred']
         cv2.line(img=img, pt1=(0, 200), pt2=(int(round(width * r)), 200), color=(0, 0, 255), thickness=100,
                  lineType=cv2.LINE_4)
 

@@ -89,7 +89,7 @@ def vgg16(img_width, img_height, img_channels, output_dim):
     #x = Dropout(0.5)(x)
     x = Dense(4096, activation='relu', name='fc2')(x)
     #x = Dropout(0.5)(x)
-    steer = Dense(output_dim, activation="linear")(x)    
+    steer = Dense(output_dim, activation="linear")(x) # "linear" to regress or "softmax" to classification
 
     model = Model(inputs=[img_input], outputs=[steer])
 

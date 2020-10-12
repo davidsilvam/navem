@@ -10,8 +10,8 @@ from sklearn.metrics import r2_score
 
 #predict_truth_train_model_weights_399.h5_0_
 phase = "test"
-set = "train"
-exp = "exp_037"
+set = "val"
+exp = "exp_042"
 name_weights = "model_weights_499.h5"
 
 if(phase == "train"):

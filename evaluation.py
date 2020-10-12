@@ -46,7 +46,7 @@ def main(argv):
         print("Impossible to find weight path. Returning untrained model")
 
     # Compile model
-    model.compile(loss='mse', optimizer='adam')
+    model.compile(loss='mse', optimizer='adam') # change to "categorical_crossentropy"
 
     # Get predictions and ground truth
     n_samples = test_generator.samples
