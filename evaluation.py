@@ -31,7 +31,7 @@ def main(argv):
                           color_mode=FLAGS.img_mode,
                           target_size=(FLAGS.img_width, FLAGS.img_height),
                           crop_size=(FLAGS.crop_img_height, FLAGS.crop_img_width),
-                          batch_size = FLAGS.batch_size)
+                          batch_size=FLAGS.batch_size)
 
     # Load json and create model
     json_model_path = os.path.join(".\\..\\experiments", FLAGS.exp_name, FLAGS.json_model_fname)

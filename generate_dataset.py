@@ -7,7 +7,7 @@ import cv2 as cv
 import os
 
 dataset_directory = "./../datasets"
-o_dataset_name = "sidewalk_accy_proportion"
+o_dataset_name = "sidewalk_accy_proportion_classes"
 network = "vgg16"
 
 dim = (224, 224)
@@ -15,8 +15,8 @@ dim = (224, 224)
 resize = True#Must be True always, False is exception
 repeted = True
 round_sample = -1
-dataset_name = "sidewalk_accy_proportion"
-dataset_name_case = "sidewalk_accy_proportion"
+dataset_name = "sidewalk_accy_proportion_classes"
+dataset_name_case = "sidewalk_accy_proportion_classes"
 
 if not os.path.exists(os.path.join(dataset_directory, network, o_dataset_name)):
     os.makedirs(os.path.join(dataset_directory, network, o_dataset_name))
@@ -32,16 +32,16 @@ min_max_array = []
 def getMinMax(array, col):
     return [data[:,col].min(), data[:,col].max()]
 
-min_max_array.append(getMinMax(data, 3))#acc_y. Muste be 2, or others
-print(min_max_array)
-os.system('pause')
+# min_max_array.append(getMinMax(data, 3))#acc_y. Muste be 2, or others
+# print(min_max_array)
+# os.system('pause')
 
 #Normalization
 #data[:,1] = (data[:,1]-data[:,1].min())/(data[:,1].max()-data[:,1].min())#Nomalize de 0 a 1
 ##data[:,1] = data[:,1].astype(float)
 ##data[:,2] = (data[:,2] - np.mean(data[:,2]))/np.std(data[:,2])#normalize (x - media) / desvio padrao
 ##data[:,2] = data[:,2].astype(float)
-data[:,3] = (data[:,3]-data[:,3].min())/(data[:,3].max()-data[:,3].min())#Nomalize
+# data[:,3] = (data[:,3]-data[:,3].min())/(data[:,3].max()-data[:,3].min())#Nomalize
 
 trainingSet, testSet = train_test_split(data, test_size=0.3)
 

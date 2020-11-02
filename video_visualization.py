@@ -8,10 +8,14 @@ video_dir = os.path.join("./../raw_datasets_videos", "2020_06_25-14_14_59", "vid
 cap = cv2.VideoCapture(video_dir)
 
 video_name = "2020_06_25-14_14_59"
-exp = "exp_035"
+exp_accx = "exp_035"
+exp_psi = "exp_040"
 
-name = os.path.join('./../experiments', exp, video_name + ".txt")
-df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
+name_accx = os.path.join('./../experiments', exp_accx, video_name + ".txt")
+name_psi = os.path.join('./../experiments', exp_psi, video_name + ".txt")
+
+df_accx = pd.read_csv(name_accx, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
+df_psi = pd.read_csv(name_accx, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
 
 cap.set(3, 640)
 cap.set(4, 480)
@@ -25,9 +29,9 @@ while (True):
     try:
         #print(df.iloc[index_df]['pred'])
         # Capture frames in the video
-        ret, frame = cap.read()
-        frame = imutils.resize(frame, width=size)
-        frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+        ret, img = cap.read()
+        img = imutils.resize(img, width=size)
+        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
         # if(a < 0):
         #     cv2.line(img=frame, pt1=(200 + a, 10), pt2=(200, 10), color=(0, 0, 255), thickness=5, lineType=10)
         #     b = 1
@@ -39,10 +43,19 @@ while (True):
         index_df += 1
 
         #print(100*df.iloc[index_df]['pred'])
-        r = df.iloc[index_df]['pred']
+        r_psi = df_accx.iloc[index_df]['pred']
         # print(int(r))
 
-        cv2.line(img=frame, pt1=(10, 10), pt2=(int(round(100*r)), 10), color=(0, 0, 255), thickness=5, lineType=10)
+        cv2.line(img=img, pt1=(int(size / 2) , 10), pt2=(int(size / 2) + 100, 10), color=(0, 255, 255), thickness=5,
+                 lineType=cv2.LINE_4)
+        if (r_psi > 0.46):
+            cv2.line(img=img, pt1=(500 - int(round(100 * r_psi)), 10), pt2=(10, 10), color=(0, 0, 255), thickness=5,
+                     lineType=cv2.LINE_4)
+        else:
+            cv2.line(img=img, pt1=(10, 10), pt2=(10, 10), color=(0, 0, 255), thickness=5,
+                     lineType=cv2.LINE_4)
+
+        # cv2.line(img=frame, pt1=(10, 10), pt2=(int(round(100*r)), 10), color=(0, 0, 255), thickness=5, lineType=10)
 
         if(a == 50):
             a = -50
@@ -56,8 +69,8 @@ while (True):
 
         #Use putText() method for
         #inserting text on video
-        cv2.putText(frame,
-                    str(r),
+        cv2.putText(img,
+                    str(r_psi),
                     (50, 50),
                     font, 1,
                     (0, 255, 255),
@@ -66,7 +79,7 @@ while (True):
 
         # Display the resulting frameq
         #if (index_df > 735):
-        cv2.imshow('video', frame)
+        cv2.imshow('video', img)
         print(index_df)
         # creating 'q' as the quit
         # button for the video

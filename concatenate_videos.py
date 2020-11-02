@@ -13,13 +13,13 @@ videofiles = [n for n in os.listdir(path) if n[-4:] == '.avi']
 
 print(videofiles)
 
-videofiles = sorted(videofiles, key=lambda item: int(item.partition('.')[0][-4:]))
+videofiles = sorted(videofiles, key=lambda item: int(item.partition('.')[0][-1:]))
 
 for i in range(len(videofiles)):
     videofiles[i] = os.path.join(path, videofiles[i])
 print(videofiles)
 
-# os.system('pause')
+os.system('pause')
 
 video_index = 0
 cap = cv2.VideoCapture(videofiles[0])

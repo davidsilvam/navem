@@ -9,15 +9,17 @@ import matplotlib.transforms as mtransforms
 from sklearn.metrics import r2_score
 
 #load full dataset
-name_full = os.path.join('./../datasets', 'sidewalk_accy.txt')# Full dataset
+name_full = os.path.join('./../datasets', 'sidewalk_accy_proportion_classes.txt')# Full dataset
 # name = os.path.join('./../datasets','vgg16/sidewalk_accx/sidewalk_accx/val/sidewalk_accx' ,'gyro.txt')# vgg16 dataset
 df_full = pd.read_csv(name_full, sep=" ", engine="python", encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx'])
+
+flag = True
 
 count_default = 0
 count_deceleration = 0
 
 for i in range(df_full.shape[0]):
-    if(df_full['accx'][i] < 0.08 and df_full['accx'][i] > -0.08):#Full dataset psi
+    if(df_full['accx'][i] < 0.1 and df_full['accx'][i] > -0.1):#Full dataset psi
     #if(df_full['accx'][i] < 2 and df_full['accx'][i] > -2):#Full dataset psi
     #if(df_full['accx'][i] > 1):#Full dataset accx   
     # if(df.at[i, 1] > 0.2 and df.at[i, 1] < 0.4):
@@ -31,6 +33,34 @@ print("% walking accx, psi- ", count_default / df_full.shape[0], "%")
 print("% deceleration or desvio - ", count_deceleration / df_full.shape[0], "%")
 
 
+def proportion(num_classes, array, col):
+    c = [0, 0, 0, 0, 0]
+    max = 1
+    array_ = (array[col] - array[col].min()) / (array[col].max() - array[col].min())
+    # array_ = array[col]
+    for i in range(len(array)):
+        if (array_[i] > 0) and (array_[i] <= max / 5):
+            c[0] += 1
+        elif (array_[i] > max / 5) and (array_[i] <= (max / 5) * 2):
+            c[1] += 1
+        elif (array_[i] > (max / 5) * 2) and (array_[i] <= (max / 5) * 3):
+            c[2] += 1
+        elif (array_[i] > (max / 5) * 3) and (array_[i] <= (max / 5) * 4):
+            c[3] += 1
+        else:
+            c[4] += 1
+
+    print("============ proportion 5 classes ===========")
+    print(c)
+    print("classe 0 => %.2f%%" % round(c[0] / len(array) * 100, 2))
+    print("classe 1 => %.2f%%" % round(c[1] / len(array) * 100, 2))
+    print("classe 2 => %.2f%%" % round(c[2] / len(array) * 100, 2))
+    print("classe 3 => %.2f%%" % round(c[3] / len(array) * 100, 2))
+    print("classe 4 => %.2f%%" % round(c[4] / len(array) * 100, 2))
+    # print("% walking accx, psi- ", count_default / df_full.shape[0], "%")
+    # print("% deceleration or desvio - ", count_deceleration / df_full.shape[0], "%")
+
+proportion(2, df_full, "accx")
 
 ########### begin real #############
 phase = "test"
