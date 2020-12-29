@@ -1,15 +1,16 @@
 import os
 import pandas as pd
 
-dataset_name = 'sidewalk_accy_proportion_classes'
+dataset_name = 'sidewalk_accy_proportion_classes_19'
 data_type = 'train'
-name = os.path.join('./../datasets', 'vgg16', dataset_name, dataset_name, data_type, dataset_name, 'gyro.txt')
+network = 'dronet'
+name = os.path.join('./../datasets', network, dataset_name, dataset_name, data_type, dataset_name, 'gyro.txt')
 # name = os.path.join('./../datasets', dataset_name + ".txt")
 
 # df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", header=None)
 df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", header=None, names=['img_dataset', 'accx'])
 
-f = open(os.path.join('./../datasets', 'vgg16', dataset_name, dataset_name, data_type, dataset_name,
+f = open(os.path.join('./../datasets', network, dataset_name, dataset_name, data_type, dataset_name,
                       'gyro_classifier.txt'), "w")
 # f = open(os.path.join('./../datasets', dataset_name + "_classes.txt"), "w")
 

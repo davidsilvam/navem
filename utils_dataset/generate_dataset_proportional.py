@@ -3,12 +3,13 @@ import pandas as pd
 import random
 import numpy as np
 
-name_full = os.path.join('./../datasets', 'sidewalk_accy.txt')# Full dataset
-f = open(os.path.join('./../datasets', 'sidewalk_accy_proportion_classes.txt'), "w")
+name_full = os.path.join('./../datasets', 'sidewalk_psi_proportion_classes_10.txt')# Full dataset
+f = open(os.path.join('./../datasets', 'sidewalk_psi_proportion_classes_11.txt'), "w")
 
 df_full = pd.read_csv(name_full, sep=" ", engine="python", encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx'])
 
-cla = 2 # class
+cla = 1 # class
+percent = 0.20
 
 def proportion():
     count_default = 0
@@ -67,7 +68,7 @@ def make_proportion_classes(arr, col, file, cla):
     arr[col] = (arr[col] - arr[col].min()) / (arr[col].max() - arr[col].min())
     min = arr[col].min()
     max = arr[col].max()
-    while(proportion_classes(arr, 'accx', cla) > 0.25):# Logic in function of proportion if psi > 50, if accx < 50
+    while(proportion_classes(arr, 'accx', cla) > percent):# Logic in function of proportion if psi > 50, if accx < 50
         m = {}
         if(cla == 1):
             m = (arr['accx'] > max / 5) & (arr['accx'] < (max / 5) * 2)

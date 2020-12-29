@@ -17,7 +17,7 @@ def main(argv):
     # Set testing mode (dropout/batchnormalization)
 
     ########### command aws #############
-    #python3 evaluation.py --exp_name="exp_029" --dataset="sidewalk_accx" --weights_fname="model_weights_259.h5" --batch_size=64
+    #python3 evaluation.py --exp_name="exp_029" --dataset="sidewalk_accy_proportion_classes_20" --weights_fname="model_weights_259.h5" --batch_size=64
 
     TEST_PHASE = 0
     TRAIN_PHASE = 1
@@ -83,3 +83,5 @@ def main(argv):
 
 if __name__ == "__main__":
     app.run(main)
+
+# python3 evaluation.py --exp_name="exp_081" --dataset="sidewalk_accy_proportion_classes_20" --weights_fname="model_weights_299.h5" --batch_size=64

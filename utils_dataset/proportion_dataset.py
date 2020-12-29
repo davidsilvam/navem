@@ -9,8 +9,9 @@ import matplotlib.transforms as mtransforms
 from sklearn.metrics import r2_score
 
 #load full dataset
-name_full = os.path.join('./../datasets', 'sidewalk_accy_proportion_classes.txt')# Full dataset
-# name = os.path.join('./../datasets','vgg16/sidewalk_accx/sidewalk_accx/val/sidewalk_accx' ,'gyro.txt')# vgg16 dataset
+name_full = os.path.join('./../datasets', 'sidewalk_accy_proportion_classes_15.txt')# Full dataset
+# name = os.path.join('./../datasets','vgg16/sidewalk_accy_proportion_classes_13/sidewalk_accy_proportion_classes_13/train/sidewalk_accy_proportion_classes_13' ,'gyro.txt')# vgg16 dataset
+# df_full = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['img_dataset', 'accx'])
 df_full = pd.read_csv(name_full, sep=" ", engine="python", encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx'])
 
 flag = True
@@ -101,7 +102,7 @@ df_gyro['accx'] = np.trunc(100000000 * df_gyro['accx']) / 100000000
 
 df_r_val_aux = df_r_val.copy()
 df_r_train_aux = df_r_train.copy()
-df_r_full =  df_r_val_aux.append(df_r_train_aux).copy()
+df_r_full = df_r_val_aux.append(df_r_train_aux).copy()
 
 print("============ Images out of error limit ===========")
 for i in range(len(df_r_full)):
@@ -233,5 +234,5 @@ def evaluate_img(img, folder, qtd_b, qtd_a, df_r_v, df_gyro_v, df_r_t, df_gyro_t
 
     return pd.DataFrame(array, columns=['type', 'image', 'pred', 'real'])
 
-##f = evaluate_img('004718.jpg', '2020_06_25-14_14_59', 5, 5, df_r_val, df_gyro, df_r_train, df_gyro_train, df_full)
+# f = evaluate_img('004718.jpg', '2020_06_25-14_14_59', 5, 5, df_r_val, df_gyro, df_r_train, df_gyro_train, df_full)
 

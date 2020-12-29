@@ -7,16 +7,16 @@ import cv2 as cv
 import os
 
 dataset_directory = "./../datasets"
-o_dataset_name = "sidewalk_accy_proportion_classes"
-network = "vgg16"
+o_dataset_name = "sidewalk_accy_proportion_classes_19"
+network = "dronet"
 
-dim = (224, 224)
+dim = (200, 200)
 
 resize = True#Must be True always, False is exception
 repeted = True
 round_sample = -1
-dataset_name = "sidewalk_accy_proportion_classes"
-dataset_name_case = "sidewalk_accy_proportion_classes"
+dataset_name = "sidewalk_accy_proportion_classes_19"
+dataset_name_case = "sidewalk_accy_proportion_classes_19"
 
 if not os.path.exists(os.path.join(dataset_directory, network, o_dataset_name)):
     os.makedirs(os.path.join(dataset_directory, network, o_dataset_name))

@@ -6,6 +6,7 @@ from keras import optimizers
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
+from keras.callbacks import EarlyStopping
 from sklearn.model_selection import train_test_split
 from libnavem import datasets
 from libnavem import models
@@ -38,6 +39,9 @@ def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
     # model.compile(loss="mean_squared_error", optimizer=opt)
     optimizer = optimizers.Adam(lr=1e-3, decay=1e-3/500)
 
+    #Stop condition
+    es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=50)
+
     # Configure training process
     model.compile(loss="categorical_crossentropy",
                   optimizer=optimizer, metrics=['accuracy'])
@@ -63,7 +67,7 @@ def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
     steps_per_epoch = int(np.ceil(train_data_generator.samples / FLAGS.batch_size))
     validation_steps = int(np.ceil(val_data_generator.samples / FLAGS.batch_size))
     history = model.fit_generator(train_data_generator, epochs=FLAGS.epochs, steps_per_epoch=steps_per_epoch,
-                                  callbacks=[writeBestModel, saveModelAndLoss], validation_data=val_data_generator,
+                                  callbacks=[writeBestModel, saveModelAndLoss, es], validation_data=val_data_generator,
                                   validation_steps=validation_steps, initial_epoch=initial_epoch)
 
     hist_df = pd.DataFrame(history.history)

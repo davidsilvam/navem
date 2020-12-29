@@ -5,7 +5,7 @@ import numpy as np
 flag_classification = True
 phase = "test"
 set = "val"
-exp = "exp_049"
+exp = "exp_090"
 name_weights = "model_weights_149.h5" # weights_500.h5 model_weights_499.h5
 
 max = 1
@@ -41,11 +41,17 @@ else:
 def getMetrics(m):
     print("Accuracy => ", sum(np.diag(m)) / np.sum(m))
     print("Precision")
+    precision = []
+    recall = []
     for c in range(len(m)):
+        precision.append(m[c][c] / np.sum(m[c, :]))
         print("Class ", c, " => ", m[c][c] / np.sum(m[c, :]))
     print("Recall")
     for c in range(len(m)):
+        recall.append(m[c][c] / np.sum(m[:, c]))
         print("Class ", c, " => ", m[c][c] / np.sum(m[:, c]))
-
+    print("F1 Score")
+    for c in range(len(m)):
+        print("F1 Score => ", (2 * precision[c] * recall[c])/(precision[c] + recall[c]))
 print(matrix)
 getMetrics(matrix)

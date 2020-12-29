@@ -11,8 +11,8 @@ from sklearn.metrics import r2_score
 #predict_truth_train_model_weights_399.h5_0_
 phase = "test"
 set = "val"
-exp = "exp_042"
-name_weights = "model_weights_499.h5"
+exp = "exp_053"
+name_weights = "model_weights_149.h5"
 
 if(phase == "train"):
     name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_1_" + '.txt')

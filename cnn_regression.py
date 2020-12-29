@@ -32,7 +32,8 @@ import keras
 # from libnavem.cnn_models import create_cnn
 
 # python3 cnn_regression.py --exp_name="exp_001" --dataset="dataset_cel_log_resized_200_200_gray" --img_mode="rgb" --batch_size=64
-# python3 cnn_regression.py --exp_name="exp_004" --dataset="dataset_navem_224_224" --img_mode="rgb" --batch_size=64
+# python3 cnn_regression.py --exp_name="exp_004" --dataset="dataset_navem_224_224" --img_mode="rgb" --batch_size=64 --img_width=227 --img_height=227 --crop_img_width=200 --crop_img_height=200
+# python3 cnn_classification.py --exp_name="exp_085" --dataset="sidewalk_accy_proportion_classes_19" --img_mode="rgb" --batch_size=64 --epochs=300
 # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.0/lib64
 
 def trainModel(train_data_generator, val_data_generator, model, initial_epoch):
