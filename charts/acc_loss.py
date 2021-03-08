@@ -9,7 +9,7 @@ import os
 #"exp_025"
 #"exp_026"
 #
-vgg16 = ["exp_090"]#side, inner, external
+vgg16 = ["exp_124"]#side, inner, external
 names = ["vgg16"]
 exp_name = vgg16
 #data = pd.read_csv("/home/david/Área de Trabalho/navem_keras/experiments/" + exp_name + "/log.txt", sep="\t", engine="python", encoding="ISO-8859-1", header=None)
@@ -23,7 +23,7 @@ for exp, name in zip([vgg16], names):
     plt.figure("vgg16")
 
     for i in enumerate(exp):
-        dir = "./../experiments/" + i[1]
+        dir = "./../../experiments/" + i[1]
         #dir = "/home/david/Área de Trabalho/navem_keras/arquivos/AWS/experimets/" + i[1]
         log_file = os.path.join(dir, "log.txt")
         log = np.genfromtxt(log_file, delimiter='\t',dtype=None, names=True)

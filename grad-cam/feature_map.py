@@ -25,6 +25,7 @@ print("Loaded model from disk")
 # load the model
 # model = VGG16()
 model = loaded_model
+model.summary()
 # redefine model to output right after the first hidden layer
 ixs = [2, 5, 9, 13, 17]
 outputs = [model.layers[i].output for i in ixs]

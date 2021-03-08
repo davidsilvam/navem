@@ -5,8 +5,8 @@ import numpy as np
 flag_classification = True
 phase = "test"
 set = "val"
-exp = "exp_090"
-name_weights = "model_weights_149.h5" # weights_500.h5 model_weights_499.h5
+exp = "exp_124"
+name_weights = "model_weights_199.h5" # weights_500.h5 model_weights_499.h5
 
 max = 1
 
@@ -26,9 +26,9 @@ def getClass(acc, max):
         return 4
 
 if phase == "train":
-    name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_1_" + '.txt')
+    name = os.path.join('./../../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_1_" + '.txt')
 else:
-    name = os.path.join('./../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_0_" + '.txt')
+    name = os.path.join('./../../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_0_" + '.txt')
 
 df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
 if flag_classification:
@@ -43,15 +43,21 @@ def getMetrics(m):
     print("Precision")
     precision = []
     recall = []
+    f1 = []
     for c in range(len(m)):
         precision.append(m[c][c] / np.sum(m[c, :]))
         print("Class ", c, " => ", m[c][c] / np.sum(m[c, :]))
+    print('Mean precision =>', np.mean(precision))
     print("Recall")
     for c in range(len(m)):
         recall.append(m[c][c] / np.sum(m[:, c]))
         print("Class ", c, " => ", m[c][c] / np.sum(m[:, c]))
+    print('Mean recall => ', np.mean(recall))
     print("F1 Score")
     for c in range(len(m)):
+        f1.append((2 * precision[c] * recall[c])/(precision[c] + recall[c]))
         print("F1 Score => ", (2 * precision[c] * recall[c])/(precision[c] + recall[c]))
+    print('Mean F1-score =>', np.mean(f1))
+
 print(matrix)
 getMetrics(matrix)
