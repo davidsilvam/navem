@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     char buf [40];
     
     ofstream myfile;
-    myfile.open("./leituras_arduino/" + string(argv[1]) + ".txt");
+    myfile.open("./leituras_arduino/parado/" + string(argv[1]) + ".txt");
 
     
     vector<string> leituras;
@@ -95,8 +95,8 @@ int main(int argc, char **argv)
     cout << "Iniciou!" << endl;
     
     auto time_ini = std::chrono::high_resolution_clock::now();
-    while(1){      
-        read_data = bcm2835_spi_transfer(2);  
+    while(1){     
+        read_data = bcm2835_spi_transfer(2); 
         //cout << read_data << endl;   
         //printf("%x\n", read_data) ;
         if( read_data == 1){        
@@ -129,12 +129,7 @@ int main(int argc, char **argv)
     myfile.close();
     
     cout << "Terminou!" << endl;
-    
-    //uint8_t send_data = 'b';
-    //uint8_t read_data = bcm2835_spi_transfer(send_data);
-    //printf("Sent to SPI: %d. Read back from SPI: %d.\n", send_data, read_data);
-    //if (send_data != read_data)
-    //  printf("Do you have the loopback from MOSI to MISO connected?\n");
+
     bcm2835_spi_end();
     bcm2835_close();
     return 0;
