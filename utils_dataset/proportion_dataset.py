@@ -9,7 +9,7 @@ import matplotlib.transforms as mtransforms
 from sklearn.metrics import r2_score
 
 #load full dataset
-name_full = os.path.join('./../../datasets', 'sidewalk_accx_all.txt')# Full dataset
+name_full = os.path.join('./../../datasets', 'sidewalk_accy_flipped_all_out_classes.txt')# Full dataset
 # name = os.path.join('./../datasets','vgg16/sidewalk_accy_proportion_classes_13/sidewalk_accy_proportion_classes_13/train/sidewalk_accy_proportion_classes_13' ,'gyro.txt')# vgg16 dataset
 # df_full = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['img_dataset', 'accx'])
 df_full = pd.read_csv(name_full, sep=" ", engine="python", encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx'])

@@ -9,8 +9,8 @@ import os
 #"exp_025"
 #"exp_026"
 #
-vgg16 = ["exp_124"]#side, inner, external
-names = ["vgg16"]
+vgg16 = ["exp_134"]#side, inner, external
+names = ["dronet"]
 exp_name = vgg16
 #data = pd.read_csv("/home/david/Área de Trabalho/navem_keras/experiments/" + exp_name + "/log.txt", sep="\t", engine="python", encoding="ISO-8859-1", header=None)
 

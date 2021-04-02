@@ -4,9 +4,9 @@ import numpy as np
 
 flag_classification = True
 phase = "test"
-set = "val"
-exp = "exp_124"
-name_weights = "model_weights_199.h5" # weights_500.h5 model_weights_499.h5
+set = "test"
+exp = "exp_134"
+name_weights = "model_weights_299.h5" # weights_500.h5 model_weights_499.h5
 
 max = 1
 

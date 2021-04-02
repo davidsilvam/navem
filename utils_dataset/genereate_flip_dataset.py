@@ -14,7 +14,7 @@ class Generate(object):
         self.dimension = dimension
         self.folders = ["train", "val", "test"]
         self.output_dataset_name = output_dataset_name
-        self.src = os.path.join(dataset_dir, output_dataset_name)
+        self.src = os.path.join(dataset_dir, dataset_name)
         self.dst = os.path.join(dataset_dir, network_name, output_dataset_name)
         Dataset.__init__(self, dataset_dir, dataset_name, dataset_output_dir, output_dataset_name)
         Dataset.loadDataset(self)
@@ -42,8 +42,8 @@ class Generate(object):
         Dataset.splitDataset(self, 0.7, 0.15, 0.15)
         for folder in zip(self.folders, self.sets):
             aux_dataset = []
-            print("Initialize -> ", folder[0])
-            dataset_file = File(os.path.join(self.dst, self.dataset_name, folder[0], self.output_dataset_name))
+            print("Initialized -> ", folder[0])
+            dataset_file = File(os.path.join(self.dst, self.output_dataset_name, folder[0], self.output_dataset_name))
             for sample in folder[1].values:
                 # print(sample)
                 if (not self.check(aux_dataset, sample[1]) or repeted):
@@ -53,24 +53,32 @@ class Generate(object):
                         # print(folder[0], sample[0])
                         resized = cv.resize(img, self.dimension, interpolation=cv.INTER_AREA)
                         cv.imwrite(
-                            os.path.join(self.dst, self.dataset_name, folder[0], self.output_dataset_name, "images/", sample[0]),
+                            os.path.join(self.dst, self.output_dataset_name, folder[0], self.output_dataset_name, "images/", sample[0]),
                             resized)
                     else:
                         cv.imwrite(
-                            os.path.join(self.dst, self.dataset_name, self.folder[0], self.output_dataset_name, "images/", sample[0]), img)
+                            os.path.join(self.dst, self.output_dataset_name, self.folder[0], self.output_dataset_name, "images/", sample[0]), img)
                     aux_dataset.append(sample)
+                    # print(folder)
+                    # os.system("pause")
             dataset_file.saveFile(aux_dataset, folder)
 
-dataset_directory = "../../datasets"
-dataset_name = "sidewalk_accx_all_out_classes"
-output_dataset_name = "sidewalk_accx_all_out_classes"
-network_name = "vgg16"
+for i in range(0, 20):
+#dataset accx -> sidewalk_accx_all_out_classes -> sidewalk_accx_184_pc_dataset_" + str(i)
+#dataset accy -> sidewalk_accy_proportion_classes_fliped_3 -> sidewalk_accy_315_pc_dataset_" #+ str(i)
+    dataset_directory = "../../datasets"
+    dataset_name = "sidewalk_accx_all_out_classes"
+    if i < 10:
+        output_dataset_name = "sidewalk_accx_184_pc_dataset_0" + str(i)
+    else:
+        output_dataset_name = "sidewalk_accx_184_pc_dataset_" + str(i)
+    network_name = "dronet"
 
-dimension = (224, 224)
+    dimension = (200, 200)
 
-resize = True#Must be True always, False is exception
-repeted = True
-round_sample = False
+    resize = True#Must be True always, False is exception
+    repeted = True
+    round_sample = False
 
-gen = Generate(dataset_directory, dataset_name, dataset_directory, output_dataset_name, network_name, dimension, resize, repeted, round_sample)
-gen.generate()
+    gen = Generate(dataset_directory, dataset_name, dataset_directory, output_dataset_name, network_name, dimension, resize, repeted, round_sample)
+    gen.generate()

@@ -35,7 +35,7 @@ class Dataset(object):
 
     def splitDataset(self, train, val, test):
         auxSet = None
-        self.trainingSet, auxSet = train_test_split(self.dataset, test_size=test, stratify=self.dataset["accx"])
+        self.trainingSet, auxSet = train_test_split(self.dataset, test_size=(test + val), stratify=self.dataset["accx"])
         self.valSet, self.testSet = train_test_split(auxSet, test_size=0.5, stratify=auxSet["accx"])
         print("Train Val Test".format())
         print("{0} {1:4} {2:4}".format(self.trainingSet.shape[0], self.valSet.shape[0], self.testSet.shape[0]))

@@ -62,16 +62,28 @@ class Proportion(object):
         c = [0, 0, 0, 0, 0]
         max = 1
         for i in range(len(array)):
-            if (array.loc[i, 'accx'] > 0) and (array.loc[i, 'accx'] <= max / 5):
-                c[0] += 1
-            elif (array.loc[i, 'accx'] > max / 5) and (array.loc[i, 'accx'] <= (max / 5) * 2):
-                c[1] += 1
-            elif (array.loc[i, 'accx'] > (max / 5) * 2) and (array.loc[i, 'accx'] <= (max / 5) * 3):
-                c[2] += 1
-            elif (array.loc[i, 'accx'] > (max / 5) * 3) and (array.loc[i, 'accx'] <= (max / 5) * 4):
-                c[3] += 1
+            if isinstance(array.loc[i, 'accx'], float):
+                if (array.loc[i, 'accx'] > 0) and (array.loc[i, 'accx'] <= max / 5):
+                    c[0] += 1
+                elif (array.loc[i, 'accx'] > max / 5) and (array.loc[i, 'accx'] <= (max / 5) * 2):
+                    c[1] += 1
+                elif (array.loc[i, 'accx'] > (max / 5) * 2) and (array.loc[i, 'accx'] <= (max / 5) * 3):
+                    c[2] += 1
+                elif (array.loc[i, 'accx'] > (max / 5) * 3) and (array.loc[i, 'accx'] <= (max / 5) * 4):
+                    c[3] += 1
+                else:
+                    c[4] += 1
             else:
-                c[4] += 1
+                if (array.loc[i, 'accx']  == 0):
+                    c[0] += 1
+                elif (array.loc[i, 'accx'] == 1):
+                    c[1] += 1
+                elif (array.loc[i, 'accx'] == 2):
+                    c[2] += 1
+                elif (array.loc[i, 'accx'] == 3):
+                    c[3] += 1
+                else:
+                    c[4] += 1
         if (percent):
             return c[cla] / len(array)
         else:
@@ -106,7 +118,7 @@ class Proportion(object):
         RawDataset.saveDatasetProportion(self, original=False)
 
 dataset_directory = "../../datasets"
-dataset_name = "sidewalk_accx_all_out"
+dataset_name = "sidewalk_accy_flipped_all_out_classes"
 output_dataset_name = "sidewalk_accx_all_out"
 quantity_per_class = 184
 
