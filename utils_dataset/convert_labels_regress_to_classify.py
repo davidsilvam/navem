@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-dataset_name = 'sidewalk_accy_proportion_classes_fliped_3'
-dataset_name_out = 'sidewalk_accy_flipped_all_out_classes'
+dataset_name = 'sidewalk_accy_all_out'
+dataset_name_out = 'sidewalk_accy_all_out_classes'
 data_type = 'train'
 network = 'vgg16'
 

@@ -66,15 +66,16 @@ class Generate(object):
 for i in range(0, 20):
 #dataset accx -> sidewalk_accx_all_out_classes -> sidewalk_accx_184_pc_dataset_" + str(i)
 #dataset accy -> sidewalk_accy_proportion_classes_fliped_3 -> sidewalk_accy_315_pc_dataset_" #+ str(i)
+#dataset accy no flipped -> sidewalk_accy_all_out_classes -> sidewalk_accy_158_pc_dataset_" + str(i)
     dataset_directory = "../../datasets"
-    dataset_name = "sidewalk_accx_all_out_classes"
+    dataset_name = "sidewalk_accy_all_out_classes"
     if i < 10:
-        output_dataset_name = "sidewalk_accx_184_pc_dataset_0" + str(i)
+        output_dataset_name = "sidewalk_accy_158_pc_dataset_0" + str(i)
     else:
-        output_dataset_name = "sidewalk_accx_184_pc_dataset_" + str(i)
-    network_name = "dronet"
+        output_dataset_name = "sidewalk_accy_158_pc_dataset_" + str(i)
+    network_name = "vgg16"
 
-    dimension = (200, 200)
+    dimension = (224, 224)
 
     resize = True#Must be True always, False is exception
     repeted = True

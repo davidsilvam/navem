@@ -52,11 +52,16 @@ class Proportion(object):
         for c in self.classes:
             print("Class {0} -> {1}".format(c, self.getProportionByClass(self.dataset_normalized, c, False)))
 
-    def printProportional(self):
+    def printProportional(self, normalize=False, print_normalized=False):
         RawDataset.loadDataset(self)
-        RawDataset.normalizeDataset(self, 'zero_one', self.dataset, 3)
-        for c in self.classes:
-            print("Class {0} -> {1}".format(c, self.getProportionByClass(self.dataset, c, False)))
+        if normalize:
+            RawDataset.normalizeDataset(self, 'zero_one', self.dataset, 3)
+        if print_normalized:
+            for c in self.classes:
+                print("Class {0} -> {1}".format(c, self.getProportionByClass(self.dataset_normalized, c, False)))
+        else:
+            for c in self.classes:
+                print("Class {0} -> {1}".format(c, self.getProportionByClass(self.dataset, c, False)))
 
     def getProportionByClass(self, array, cla, percent):
         c = [0, 0, 0, 0, 0]
@@ -94,6 +99,7 @@ class Proportion(object):
         RawDataset.normalizeDataset(self, 'zero_one', self.dataset, 3)
         # print(self.getProportionByClass(self.dataset_normalized, 4, False))
         # self.printProportionAllClasses(self.dataset_normalized)
+        # os.system("pause")
         for c in self.classes:
             while(self.getProportionByClass(self.dataset_normalized, c, False) > self.quantity):
                 m = {}
@@ -118,10 +124,10 @@ class Proportion(object):
         RawDataset.saveDatasetProportion(self, original=False)
 
 dataset_directory = "../../datasets"
-dataset_name = "sidewalk_accy_flipped_all_out_classes"
-output_dataset_name = "sidewalk_accx_all_out"
-quantity_per_class = 184
+dataset_name = "sidewalk_accy"
+output_dataset_name = "sidewalk_accy_all_out"
+quantity_per_class = 158
 
 proportion = Proportion(dataset_directory, dataset_name, dataset_directory, output_dataset_name, quantity_per_class)
 # proportion.makeProportion()
-proportion.printProportional()
+proportion.printProportional(normalize=True)

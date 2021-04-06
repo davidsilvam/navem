@@ -16,6 +16,8 @@ class ResultsExperiments():
         self._all_recall = []
         self._all_F1_score = []
         self._all_confusion_matrix = []
+        self._best_exps = {}
+        self._best_results = {}
 
     def load_results_file(self):
         """
@@ -32,6 +34,99 @@ class ResultsExperiments():
                                       "predict_truth_" + set + "_" + self._name_weights + "_0_" + ".txt")
             df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
             self._array_raw_exps.append(df)
+
+    def print_best_result(self):
+        """
+        Print best results from each experiments
+        :return:
+        """
+        for exp in self._best_results:
+            # print(exp, self._best_results[exp])
+            print("============== Exp {0} ==================".format(exp))
+            for metric in self._best_results[exp]:
+                print(metric, self._best_results[exp][metric])
+
+    def create_dict_best_model(self, dict, metric):
+        """
+        Create dictionary from metric use to logs
+        :param dict: Dictionary initialized
+        :param metric: Metric name
+        :return: Dictionary filled with metrics
+        """
+        if metric == "train_loss" or metric == "val_loss":
+            res = {"best_all": 999, "index_best_all": -1, "best_10_by_10": 999, "index_best_10by_10": -1}
+        else:
+            res = {"best_all": -1, "index_best_all": -1, "best_10_by_10": -1, "index_best_10by_10": -1}
+        dict[metric] = res
+        return dict
+
+    def add_best_exp(self, exp, array_best, metric="train_loss"):
+        """
+        Add best result of a metric in dictionary _best_exps
+        :param exp: Experiment number
+        :param array_best: Dictionary with best results
+        :param metric: Metric name
+        :return:
+        """
+        self._best_exps[exp] = array_best[metric]["index_best_10by_10"]
+
+    def print_best_exps(self, metric="acc_loss"):
+        """
+        Print best experiments
+        :param metric: Metric name
+        :return:
+        """
+        for exp in self._best_results:
+            self.add_best_exp(exp, self._best_results[exp], metric)
+        print("============ Best exps ============")
+        print(self._best_exps)
+
+    def best_result(self, exp, array_log):
+        """
+        Get best results from each experiment
+        :param exp:
+        :param array_log:
+        :return:
+        """
+        max = {}
+        metrics = ["train_loss", "acc", "val_loss", "acc_loss"]
+        for metric in metrics:
+            max = self.create_dict_best_model(max, metric)
+            for value, res in enumerate(array_log[metric]):
+                if metric == "train_loss" or metric == "val_loss":
+                    if max[metric]["best_all"] > res:
+                        max[metric]["best_all"] = res
+                    # print(value % 10, max[metric]["best_10_by_10"] > res, value )
+                    if value % 10 == 9 and max[metric]["best_10_by_10"] > res and value != 0:
+                        max[metric]["best_10_by_10"] = res
+                        max[metric]["index_best_10by_10"] = value
+                else:
+                    if max[metric]["best_all"] < res:
+                        max[metric]["best_all"] = res
+                    if value % 10 == 9 and max[metric]["best_10_by_10"] < res and value != 0:
+                        max[metric]["best_10_by_10"] = res
+                        max[metric]["index_best_10by_10"] = value
+            # print(max[metric])
+            max[metric]["index_best_all"] = np.where(array_log[metric] == max[metric]["best_all"])[0][0]
+            # max[metric]["index_best_10by_10"] = np.where(array_log[metric] == max[metric]["best_10_by_10"])[0][0]
+        self._best_results[str(exp)] = max
+        # self.print_best_result(max)
+
+    def get_results_log(self, exp, file="log.txt"):
+        """
+        Load and get run best results
+        :param exp:
+        :param file:
+        :return:
+        """
+        for e in exp:
+            log = np.genfromtxt(os.path.join(self._exps_path, "exp_" + str(e), file), delimiter='\t', dtype=None, names=True)
+            # train_loss = log['train_loss']
+            # val_loss = log['val_loss']
+            # acc = log['acc']
+            # val_acc = log['acc_loss']
+            self.best_result(e, log)
+            # print("================= Exp {0} =================".format(e))
 
     def get_confusion_matrix(self, num_classes, df_exp):
         """
@@ -152,7 +247,7 @@ class ResultsExperiments():
 
     def generate_statistics(self):
         """
-
+        Generate all results of statistics and get best model
         :return:
         """
         self.get_metrics()
@@ -182,6 +277,11 @@ class ResultsExperiments():
         print("Mean F1 score -> {0}".format(np.mean(self._all_F1_score[best_model["index"]])))
 
     def print_metric_by_class(self, matrix):
+        """
+        Print results per class
+        :param matrix: Confusion matrix
+        :return:
+        """
         for value, clas in enumerate(matrix):
             print("Class {0} -> {1}".format(value, clas))
 
@@ -241,8 +341,6 @@ class ResultsExperiments():
                   max = acc
             return {"max_value": max, "index": self._all_accuracy.index(max)}
 
-
-
 exps_path = "../../experiments"
 exps_dronet_velx = [134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153]
 set = "test"
@@ -251,7 +349,7 @@ name_weights = "model_weights_299.h5"
 num_classes = 5
 
 res = ResultsExperiments(exps_path, exps_dronet_velx, exps_phase, name_weights, set, num_classes)
-res.generate_statistics()
-
-
-
+res.get_results_log(exps_dronet_velx) # Get results to print.
+# res.print_best_result() # Print metrics log of experiments
+res.print_best_exps(metric="acc_loss") # Print best model each exp
+# res.generate_statistics()
