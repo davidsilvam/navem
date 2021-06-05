@@ -6,12 +6,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-begin = 50
-end = 3501
+begin = 370
+end = 1900
 
-video_name = "2020_06_25-16_49_23"
-video_directory = "./../raw_datasets_videos"
-images_directory = "./../raw_datasets_images"
+video_name = "2021_04_03-08_28_10"
+video_directory = "./../../raw_datasets_videos"
+images_directory = "./../../raw_datasets_images"
 
 accJson = json.load(open(os.path.join(video_directory, video_name, "accelerations.json"),"r"))
 camJson = json.load(open(os.path.join(video_directory, video_name, "frames.json"),"r"))

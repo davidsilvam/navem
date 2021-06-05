@@ -4,9 +4,13 @@ import numpy as np
 
 flag_classification = True
 phase = "test"
-set = "test"
-exp = "exp_134"
-name_weights = "model_weights_299.h5" # weights_500.h5 model_weights_499.h5
+set = "train"
+exp = "exp_198"
+name_weights = "model_weights_99.h5" # weights_500.h5 model_weights_499.h5
+
+# From test separated predict
+name_file_predict = "trained_indoor_predict_sidewalk_accx_00"
+separated = True
 
 max = 1
 
@@ -25,11 +29,13 @@ def getClass(acc, max):
     else:
         return 4
 
-if phase == "train":
-    name = os.path.join('./../../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_1_" + '.txt')
+if not separated:
+    if phase == "train":
+        name = os.path.join('./../../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_1_" + '.txt')
+    else:
+        name = os.path.join('./../../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_0_" + '.txt')
 else:
-    name = os.path.join('./../../experiments', exp, "predict_truth_" + set + "_" + name_weights + "_0_" + '.txt')
-
+    name = os.path.join('./../../experiments', exp, name_file_predict + '.txt')
 df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
 if flag_classification:
     for i in range(len(df)):

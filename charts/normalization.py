@@ -6,17 +6,39 @@ import seaborn as sns
 ##import scipy.stats as stats
 ##import pylab as pl
 
-dataset_directory = "./../datasets"
-o_dataset_name = "all_dataset"
+dataset_directory = "./../../datasets"
+o_dataset_name = "indoor_dataset_velx"
 
 data = pd.read_csv(os.path.join(dataset_directory, o_dataset_name + ".txt"), sep=" ", engine="python", encoding="ISO-8859-1", header=None).values
+    
 
 ##norm_m = (data[:,2] - np.mean(data[:,2]))/np.std(data[:,2])#normalize (x - media) / desvio padrao
 ##norm = (data[:,2]-data[:,2].min())/(data[:,2].max()-data[:,2].min())
-col = 1
+col = 3
 d = data[:,col]
 d1 = (data[:,col]-data[:,col].min())/(data[:,col].max()-data[:,col].min())
 d2 = (data[:,col] - np.mean(data[:,col]))/np.std(data[:,col])#normalize (x - media) / desvio padrao
+
+#########
+c = [0, 0, 0, 0, 0]
+for i in d1:    
+    if i > 0 and i <= 0.2:
+        c[0]+=1
+    if i > 0.2 and i <= 0.4:
+        c[1]+=1
+    if i > 0.4 and i <= 0.6:
+        c[2]+=1
+    if i > 0.6 and i <= 0.8:
+        c[3]+=1
+    if i > 0.8 and i <= 1:
+        c[4]+=1
+##    print(i)
+
+print(max(d1))
+print(np.where(d1 == 1))
+print(c)
+
+#########
 
 ##plt.hist(d, 30, alpha=0.5, edgecolor='black', color='red', linewidth=1.2, label='Raw data')
 ##plt.plot()

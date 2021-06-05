@@ -100,6 +100,7 @@ class Proportion(object):
         # print(self.getProportionByClass(self.dataset_normalized, 4, False))
         # self.printProportionAllClasses(self.dataset_normalized)
         # os.system("pause")
+
         for c in self.classes:
             while(self.getProportionByClass(self.dataset_normalized, c, False) > self.quantity):
                 m = {}
@@ -124,10 +125,10 @@ class Proportion(object):
         RawDataset.saveDatasetProportion(self, original=False)
 
 dataset_directory = "../../datasets"
-dataset_name = "sidewalk_accy"
-output_dataset_name = "sidewalk_accy_all_out"
-quantity_per_class = 158
+dataset_name = "sidewalk_accy_all_out_classes"
+output_dataset_name = "indoor_dataset_vely_all_out_test"
+quantity_per_class = 232
 
 proportion = Proportion(dataset_directory, dataset_name, dataset_directory, output_dataset_name, quantity_per_class)
 # proportion.makeProportion()
-proportion.printProportional(normalize=True)
+proportion.printProportional(normalize=False, print_normalized=False)

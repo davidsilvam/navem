@@ -3,12 +3,12 @@ import json
 import cv2 as cv
 import shutil
 
-labels_name = "labels_50_3501"
-dataset_name = "2020_06_25-16_49_23"#new_sidewalk
-video_name = "2020_06_25-16_49_23"
-video_directory = "./../raw_datasets_videos"
-images_directory = "./../raw_datasets_images"
-dataset_directory = "./../datasets"
+labels_name = "labels_11401_12550"
+dataset_name = "indoor_dataset"#new_sidewalk
+video_name = "2021_04_03-08_33_12"
+video_directory = "./../../raw_datasets_videos"
+images_directory = "./../../raw_datasets_images"
+dataset_directory = "./../../datasets"
 
 print(labels_name)
 f = open(os.path.join(video_directory, video_name, labels_name + ".txt"))

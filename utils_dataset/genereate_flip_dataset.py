@@ -73,9 +73,9 @@ for i in range(0, 20):
         output_dataset_name = "sidewalk_accy_158_pc_dataset_0" + str(i)
     else:
         output_dataset_name = "sidewalk_accy_158_pc_dataset_" + str(i)
-    network_name = "vgg16"
+    network_name = "dronet"
 
-    dimension = (224, 224)
+    dimension = (200, 200)
 
     resize = True#Must be True always, False is exception
     repeted = True

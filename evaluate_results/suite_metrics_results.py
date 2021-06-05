@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class ResultsExperiments():
-    def __init__(self, exps_path, exps, phase, name_weigths, set, num_classes):
+    def __init__(self, exps_path, exps, phase, name_weigths, set, num_classes, load_bests=False):
         self._exps_path = exps_path
         self._exps = exps
         self._array_raw_exps = []
@@ -18,6 +18,7 @@ class ResultsExperiments():
         self._all_confusion_matrix = []
         self._best_exps = {}
         self._best_results = {}
+        self._load_best_models = load_bests # Means that load weights are the best fo all models
 
     def load_results_file(self):
         """
@@ -26,12 +27,16 @@ class ResultsExperiments():
         """
         for exp in self._exps:
             name = ""
+            if self._load_best_models:
+                name_weights = "model_weights_" + str(self._best_exps[str(exp)]) + ".h5"
+            else:
+                name_weights = self._name_weights
             if self._phase == "train":
                 name = os.path.join(self._exps_path, "exp_" + str(exp),
-                                      "predict_truth_" + set + "_" + self._name_weights + "_1_" + ".txt")
+                                      "predict_truth_" + set + "_" + name_weights + "_1_" + ".txt")
             else:
                 name = os.path.join(self._exps_path, "exp_" + str(exp),
-                                      "predict_truth_" + set + "_" + self._name_weights + "_0_" + ".txt")
+                                      "predict_truth_" + set + "_" + name_weights + "_0_" + ".txt")
             df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", names=['pred', 'real'])
             self._array_raw_exps.append(df)
 
@@ -221,8 +226,14 @@ class ResultsExperiments():
         :return: Array filled with F1 score of each class
         """
         f1_score_classes = []
+        # print(matrix)
         for clas in range(len(matrix)):
+            # print((2 * self.precision_class(clas, matrix) * self.recall_class(clas, matrix)))
+            # print((self.precision_class(clas, matrix)))
+            # print((self.recall_class(clas, matrix)), clas)
+            # os.system("pause")
             f1_score_classes.append((2 * self.precision_class(clas, matrix) * self.recall_class(clas, matrix)) / (self.precision_class(clas, matrix) + self.recall_class(clas, matrix)))
+        # np.seterr('raise')
         return f1_score_classes
 
     def f1_score(self):
@@ -230,8 +241,11 @@ class ResultsExperiments():
         Obtain F1 score from whole experiments
         :return:
         """
+        c = 0
         for matrix in self._all_confusion_matrix:
+            # print("========== {0} ========".format(c))
             self._all_F1_score.append(self.get_f1_score(matrix))
+            c = c + 1
 
     def get_metrics(self):
         """
@@ -262,7 +276,7 @@ class ResultsExperiments():
 
         best_model = self.get_best_model("accuracy")
         print("======= Best model =========")
-        print("Exp {0}".format(best_model["index"]))
+        print("Exp {0}".format(self._exps[best_model["index"]]))
         print("------ Accuracy -------")
         print("Accuracy -> {0}".format(best_model["max_value"]))
         print(self._all_confusion_matrix[best_model["index"]])
@@ -284,7 +298,6 @@ class ResultsExperiments():
         """
         for value, clas in enumerate(matrix):
             print("Class {0} -> {1}".format(value, clas))
-
 
     def mean_accuracy(self, array_accuracy):
         """
@@ -342,14 +355,46 @@ class ResultsExperiments():
             return {"max_value": max, "index": self._all_accuracy.index(max)}
 
 exps_path = "../../experiments"
-exps_dronet_velx = [134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153]
+
+# no transfer
+no_vgg16_sidewalk_accy_158_pc_dataset = []
+no_resnet50_sidewalk_accy_158_pc_dataset = []
+no_dronet_sidewalk_accy_158_pc_dataset = []
+no_squeezenet_sidewalk_accy_158_pc_dataset = []
+
+# no transfer
+no_vgg16_sidewalk_accy_flipped_315_pc_dataset = []
+no_resnet_sidewalk_accy_flipped_315_pc_dataset = []
+no_dronet_sidewalk_accy_flipped_315_pc_dataset = []
+no_squeezenet_sidewalk_accy_flipped_315_pc_dataset = []
+
+# transfer
+vgg16_sidewalk_accy_flipped_315_pc_dataset = [260, 271, 272, 273, 274, 275, 276, 277, 278, 279]
+resnet_sidewalk_accy_flipped_315_pc_dataset = [261, 262, 263, 264, 265, 266, 267, 268, 269, 270]
+dronet_sidewalk_accy_flipped_315_pc_dataset = [250, 251, 252, 253, 254, 255, 256, 257, 258, 259]
+
+# transfer learning
+dronet_sidewalk_accx_184_pc_dataset = [134, 135, 136, 137, 138, 139, 140, 141, 142, 143]# , 144, 145, 146, 147, 148, 149, 150, 151, 152, 153]
+resnet50_sidewalk_accx_184_pc_dataset= [154, 155, 156, 157, 158, 159, 160, 161, 162, 163]# , 164, 165, 166, 167, 168, 169, 170, 171, 172, 173]
+vgg16_sidewalk_accx_184_pc_dataset = [127, 128, 129, 130, 174, 175, 176, 177, 178, 179] # , 180, 181, 182, 183, 184, 185, 186, 187, 188, 189]
+
+# transfer learning
+vgg16_indoor_accx_572_pc_dataset = [190, 191, 226, 227, 228, 229, 230, 231, 232, 233]
+resnet50_indoor_accx_572_pc_dataset = [194, 195, 202, 203, 204, 205, 206, 207, 208, 209]
+dronet_indoor_accx_572_pc_dataset = [198, 199, 234, 235, 236, 237, 238, 239, 240, 241]
+
+# transfer learning
+vgg16_indoor_accy_flipped_232_pc_dataset = [192, 193, 218, 219, 220, 221, 222, 223, 224, 225]
+resnet50_indoor_accy_flipped_232_pc_dataset = [196, 197, 210, 211, 212, 213, 214, 215, 216, 217]
+dronet_indoor_accy_flipped_232_pc_dataset = [200, 201, 242, 243, 244, 245, 246, 247, 248, 249]
+
 set = "test"
 exps_phase = "test"
-name_weights = "model_weights_299.h5"
+name_weights = "model_weights_99.h5" # dronet 299
 num_classes = 5
 
-res = ResultsExperiments(exps_path, exps_dronet_velx, exps_phase, name_weights, set, num_classes)
-res.get_results_log(exps_dronet_velx) # Get results to print.
+res = ResultsExperiments(exps_path, resnet50_sidewalk_accx_184_pc_dataset , exps_phase, name_weights, set, num_classes, load_bests=False)
+res.get_results_log(resnet50_sidewalk_accx_184_pc_dataset ) # Get results to print.
 # res.print_best_result() # Print metrics log of experiments
-res.print_best_exps(metric="acc_loss") # Print best model each exp
-# res.generate_statistics()
+# res.print_best_exps(metric="val_loss") # Print best model each exp
+res.generate_statistics()
