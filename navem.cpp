@@ -21,6 +21,7 @@
       using namespace chrono;
       
       void media_e_desvioPadrao(int* vector[], int size);
+      unsigned int calibration = 0;
       
       /*
       * Classe Camera possui todos os métodos para utilizar a câmera via USB na Rasp
@@ -40,20 +41,25 @@
       };
       
       Camera::Camera(){
+            cout << "VALORES PADROES CAMERA: " << endl;
+            cout << "ISO: " << CameraObj.getISO() << endl;
+            cout << "Shutter Speed" << CameraObj.getShutterSpeed() << endl;
+            cout << "Exposure:" << CameraObj.getExposure() << endl;
+            
             CameraObj.setCaptureSize(w, h);
-            CameraObj.setFrameRate(10);
-            //CameraObj.setShutterSpeed(330000);
+            CameraObj.setFrameRate(6);
+            CameraObj.setShutterSpeed(8000); //  1/125
             //CameraObj.setExposureCompensation(0);
             //CameraObj.setBrightness(70);
             //CameraObj.setSharpness (0);
             //CameraObj.setContrast (15);
             //CameraObj.setSaturation (15);
-            CameraObj.setISO (200);
-            CameraObj.setVideoStabilization(true);
-            CameraObj.setExposureCompensation (0);
+            //CameraObj.setISO (400);  // 400/800 *
+            //CameraObj.setVideoStabilization(true);
+            //CameraObj.setExposureCompensation (25); // *
             CameraObj.setExposure (raspicam::RASPICAM_EXPOSURE_AUTO);
-            CameraObj.setAWB(raspicam::RASPICAM_AWB_AUTO);
-            CameraObj.setAWB_RB(1, 1);
+            //CameraObj.setAWB(raspicam::RASPICAM_AWB_AUTO);
+            //CameraObj.setAWB_RB(1, 1);
             
             //Open camera 
             cout << "Opening Camera..." << endl;
@@ -99,7 +105,7 @@
             public:		
             void InicioJson(string);
             void FimJson();
-            void ObjJson(string, string, string, string, bool);
+            void ObjJson(string, string, string, string, int, bool);
             void ObjCameraJson(long long int,long long int, bool);
             void ObjTemposJson(long long int,bool);
             Arquivo(string, string);
@@ -114,8 +120,9 @@
       * int tempo_us -> Tempo em microsegundos
       * bool ultimo -> true, se for o último objeto a ser escrito.
       */
-      void Arquivo::ObjJson(string v_x, string v_y, string v_z, string tempo_us, bool ultimo = false){
+      void Arquivo::ObjJson(string v_x, string v_y, string v_z, string tempo_us, int index, bool ultimo = false){
             myfile << "{";
+            myfile << "\"index\":" + to_string(index) + ",\n";
             myfile << "\"AccX\":" + v_x + ",\n";
             myfile << "\"AccY\":" + v_y + ",\n";
             myfile << "\"AccZ\":" + v_z + ",\n";
@@ -130,7 +137,7 @@
       void Arquivo::ObjCameraJson(long long int tempoIni, long long int tempoFim, bool ultimo = false){
             myfile << "{\n";
             myfile << "\"time_ini_usec\":" + to_string(tempoIni) + ",\n";
-            myfile << "\"time_fim_usec\":" + to_string(tempoFim) + "\n";
+            myfile << "\"time_fim_usec\":" + to_string(tempoFim) + ",\n";
             myfile << "\"time_fim-ini_usec\":" + to_string(tempoFim - tempoIni) + "\n";
             if(ultimo){
             myfile << "}\n";
@@ -182,7 +189,7 @@
       string data = __DATE__;
       string hora = __TIME__;
       
-      string dir = "/home/pi/Desktop/camera/" + data + ":" + hora;
+      string dir = "/home/pi/Desktop/camera/Exps_Camera+Arduino/" + data + ":" + hora;
       int pasta = mkdir(dir.c_str() ,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
       string path = dir + "/";
       
@@ -195,7 +202,7 @@
       
       bool fimCamera = 0;
       
-      void* chamadaCamera(void* arg){
+void* chamadaCamera(void* arg){
       /*auto start = std::chrono::high_resolution_clock::now();
       imwrite("/home/pi/Pictures/imagem" + to_string(frameCount) + ".jpg" ,frame);
       auto end = std::chrono::high_resolution_clock::now();
@@ -219,8 +226,9 @@
       
       int quantidadeFrames = 100;
       //while(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() < tempoMilli)
-      printf("AGORAAAAAAAAAAAA !!!!!!!!!!!!!!!\n\n");
+      printf("Iniciando câmera\n\n");
       sleep(3);
+      while(calibration){}
       for(int j = 0; j < quantidadeFrames ; j++){
             Mat frame;
             /*if(!flagSen){
@@ -237,7 +245,7 @@
             auto stop = std::chrono::high_resolution_clock::now();
             //
             long long int fim = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
-            arqCamera.ObjCameraJson(ini, fim);
+            arqCamera.ObjCameraJson(ini, fim, j == quantidadeFrames - 1);
             //
             double elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop-start).count();
             tempos[j] = elapsedTime;
@@ -248,9 +256,8 @@
             frames.push_back(cv::Mat(camera.h,camera.w,CV_8UC3, camera.data));
             
             if(j == 99){
-            fimCamera = 1;
+                  fimCamera = 1;
             }
-            
       }
             
       double soma = 0;
@@ -275,42 +282,44 @@
       printf("Gravando...\n");
       double tempoGravacao[quantidadeFrames];
       for(int i = 0; i < frames.size(); i++){
-      
-      //auto inicio = std::chrono::high_resolution_clock::now();
-      cvtColor(frames[i], frames[i], 4);
-      if(i < 10)
-            imwrite(path + "0" + to_string(i) + ".jpg" ,frames[i]); 
-      else  
-            imwrite(path + to_string(i) + ".jpg" ,frames[i]); 
-      //auto fim = std::chrono::high_resolution_clock::now();
-      //cout << TemposGravacao(fim,inicio) << endl;
-      //tempoGravacao[i] = TemposGravacao(fim,inicio);
+            
+            //auto inicio = std::chrono::high_resolution_clock::now();
+            cvtColor(frames[i], frames[i], 4);
+            if(i < 10)
+                  imwrite(path + "0" + to_string(i) + ".jpg" ,frames[i]); 
+            else  
+                  imwrite(path + to_string(i) + ".jpg" ,frames[i]); 
+            //auto fim = std::chrono::high_resolution_clock::now();
+            //cout << TemposGravacao(fim,inicio) << endl;
+            //tempoGravacao[i] = TemposGravacao(fim,inicio);
       
       }
       arqTempo.FimJson();
+      arqCamera.FimJson();
       pthread_mutex_unlock(&mutex1);
       sem_post(&sen);
       flagCam = 1;
       printf("Finalizou thread camera\n");
       return NULL;
+  
+
       }
       
-      void* chamadaSensores(void* arg){
+void* chamadaSensores(void* arg){
       //MPU mpu;
       Arquivo arqGiro(path, "rotations");
       Arquivo arqAcel(path, "accelerations");
       
-      if (!bcm2835_init())
-      {
-      printf("bcm2835_init failed. Are you running as root??\n");
-      //return 1;
+      if (!bcm2835_init()){
+            printf("bcm2835_init failed. Are you running as root??\n");
+            //return 1;
       }
       
-      if (!bcm2835_spi_begin())
-      {
-      printf("bcm2835_spi_begin failed. Are you running as root??\n");
-      //return 1;
+      if (!bcm2835_spi_begin()){
+            printf("bcm2835_spi_begin failed. Are you running as root??\n");
+            //return 1;
       }
+      
       bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);      // The default
       bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);                   // The default
       bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_1024); // The default
@@ -323,55 +332,66 @@
       
       vector<string> leituras;
       leituras.reserve(20000);
-      unsigned long int cont = 0;            
-      uint8_t read_data;  
+      unsigned long int contador = 0;       
+           
+      uint8_t read_data; 
+      bcm2835_spi_transfer(1); // INICIA CALIBRAÇÃO
       
-      //while(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() < tempoMilli){
+      calibration = (int)bcm2835_spi_transfer(2);
+      
+      while(calibration){ //VERIFICA SE AINDA ESTÁ CALIBRANDO
+            calibration = (int)bcm2835_spi_transfer(2);
+            cout << "Calibração " << calibration << endl;
+            usleep(100000);
+            contador++;
+      }
+      
+      contador = 0;
+      
       while(fimCamera == 0){
-            //if(!flagCam){
-            //sem_wait(&sen);
-            //}				
-            //pthread_mutex_lock(&mutex1);
-            read_data = bcm2835_spi_transfer(2);  
+            read_data = bcm2835_spi_transfer(3);  
             
-            if( read_data == 1){                    
-                  read_data = bcm2835_spi_transfer(1);
-                  
-                  for (int pos = 0; pos < sizeof(buf) - 1; pos++){
-                        delayMicroseconds (350);
-                        buf [pos] = bcm2835_spi_transfer(0);
-                              
-                        if (buf [pos] == 0){
-                              break;
-                        }
-                  }            
-                  //double elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop-start).count();
-                  //double elapsedTimeWalking = std::chrono::duration_cast<std::chrono::microseconds>(stop-time_ini).count();
-                  leituras.push_back(buf);
-                  //cout << buf << endl;
-                  //cout << elapsedTime << " - " << buf << endl;
-                  //if(cont++ > 20) break;
-                  cont++;
-            }
+            usleep(50000);
             
+            for (int pos = 0; pos < sizeof(buf) - 1; pos++){
+                    delayMicroseconds (30);
+                    buf [pos] = bcm2835_spi_transfer(0);
+                        
+                    if (buf [pos] == 0){
+                         break;
+                    }
+            }   
+            
+            /*
+            cout << "i " << contador << ": ";
+            cout << buf << endl;
+            contador++;     */
+
+            leituras.push_back(buf);
             pthread_mutex_unlock(&mutex1);
             if(!flagCam)
-            sem_post(&cam);		
+            sem_post(&cam);	
+            //}
       }
       
       string accx,accy,accz,row,pitch,yaw,tempos;
       unsigned int contadorDoisPontos = 0;     
-      
+      cout << endl;
       for(int i = 0; i < leituras.size(); i++){
             contadorDoisPontos = 0;
             accx = "",accy = "",accz = "",row = "",pitch = "",yaw = "",tempos = "";
             
-            for(int j = 0; j < leituras[i].size(); j++){
+            for(int j = 1; j < leituras[i].size(); j++){
                   
                     if(leituras[i][j] == ':'){
                           contadorDoisPontos++;
                           continue;
-                    }else{
+                    }
+                    else if(leituras[i][j] == '\0'){
+                        cout << "VEIO VAZIO" << endl;
+                        break;
+                    }
+                    else{
                           if(contadorDoisPontos == 0) accx += leituras[i][j];
                           else if(contadorDoisPontos == 1) accy += leituras[i][j];
                           else if(contadorDoisPontos == 2) accz += leituras[i][j];
@@ -382,7 +402,7 @@
                     }
                     
             }
-/*
+            /*
         cout << i << ": ";
 	  cout << "AccX: " << accx << endl;
 	  cout << "AccY: " << accy << endl;
@@ -393,11 +413,10 @@
 	  cout << "Tempo " << tempos << endl;
         
         cout << endl;*/
-        
-        arqAcel.ObjJson(accx,accy,accz,tempos);
-
-	  
+        arqAcel.ObjJson(accx,accy,accz,tempos, i, i == (leituras.size() - 1));
       }
+      
+      
 
       arqGiro.FimJson();
       arqAcel.FimJson();
@@ -406,23 +425,27 @@
       flagSen = 1;
       printf("Finalizou thread sensores\n");
       return NULL;
+      
       }
       
-      int main ( int argc,char **argv ) {
-            pthread_t chamadaCam, chamadaSen;
+int main ( int argc,char **argv ) {
+            pthread_t chamadaSen, chamadaCam;
+           
             sem_init(&cam, 0, 1);
             sem_init(&sen, 0, 0);
+            
             pthread_mutex_init(&mutex1, NULL);
             
             inicioComum = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
             
-            pthread_create(&chamadaCam, NULL, chamadaCamera, NULL);
             pthread_create(&chamadaSen, NULL, chamadaSensores, NULL);
+            pthread_create(&chamadaCam, NULL, chamadaCamera, NULL);
+            
             pthread_exit(NULL);
             return 0;
       }
       
-      void media_e_desvioPadrao(int* vector[], int size){
+void media_e_desvioPadrao(int* vector[], int size){
              double soma = 0;
              double dp = 0;
 
