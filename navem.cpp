@@ -19,25 +19,26 @@
       using namespace std;
       using namespace cv;
       using namespace chrono;
+      unsigned int calibration = 0;
+      unsigned const int qtdFrames = 100; //MAX: 700
       
       void media_e_desvioPadrao(int* vector[], int size);
-      unsigned int calibration = 0;
       
       /*
       * Classe Camera possui todos os métodos para utilizar a câmera via USB na Rasp
       */
       class Camera{
-      public:
-      Camera();
-      void SalvarFrame(string, string);
-      void GetImage();
-      raspicam::RaspiCam CameraObj; //Cmaera object
-      unsigned char *data;
-      int w = 640;//1280
-      int h = 480;//960
-      private:
-      Mat frame;                
-      //VideoCapture cap;	
+            public:
+                  Camera();
+                  void SalvarFrame(string, string);
+                  void GetImage();
+                  raspicam::RaspiCam CameraObj; //Cmaera object
+                  unsigned char *data;
+                  int w = 640;//1280
+                  int h = 480;//960
+            private:
+                  Mat frame;                
+            //VideoCapture cap;	
       };
       
       Camera::Camera(){
@@ -48,7 +49,7 @@
             
             CameraObj.setCaptureSize(w, h);
             CameraObj.setFrameRate(6);
-            CameraObj.setShutterSpeed(8000); //  1/125
+            CameraObj.setShutterSpeed(20000); //  1/125 // 8000 // 500
             //CameraObj.setExposureCompensation(0);
             //CameraObj.setBrightness(70);
             //CameraObj.setSharpness (0);
@@ -189,7 +190,7 @@
       string data = __DATE__;
       string hora = __TIME__;
       
-      string dir = "/home/pi/Desktop/camera/Exps_Camera+Arduino/" + data + ":" + hora;
+      string dir = "/home/pi/Desktop/experimentos/Exps_10.07.2021/" + data + ":" + hora;
       int pasta = mkdir(dir.c_str() ,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
       string path = dir + "/";
       
@@ -197,46 +198,22 @@
       int tempoMilli = 5000;
       
       long long int inicioComum = 0;
-      double tempos[100];
-      int quantidadeFrames = 10;
+      double tempos[qtdFrames];
       
       bool fimCamera = 0;
       
 void* chamadaCamera(void* arg){
-      /*auto start = std::chrono::high_resolution_clock::now();
-      imwrite("/home/pi/Pictures/imagem" + to_string(frameCount) + ".jpg" ,frame);
-      auto end = std::chrono::high_resolution_clock::now();
-      elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
-      tempos[frameCount] = elapsedTime;*/
-      //Camera camera;
-      /*
-      string data = __DATE__;
-      string hora = __TIME__;
-      string path = "/home/pi/Desktop/camera/Imgs/" + data + ":" + hora;
-      */
       Arquivo arqCamera(path, "frames");
-      
       Camera camera;    
-      //camera.GetImage();    
-      
-      //cout << "asdfasdf " << camera.CameraObj.getImageTypeSize ( raspicam::RASPICAM_FORMAT_RGB ) << endl;
-      
       vector<Mat> frames;
-      frames.reserve(100);    
-      
-      int quantidadeFrames = 100;
-      //while(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() < tempoMilli)
+      frames.reserve(qtdFrames);
       printf("Iniciando câmera\n\n");
-      sleep(3);
       while(calibration){}
-      for(int j = 0; j < quantidadeFrames ; j++){
+      
+      cout << "\n" << "INICIO" << endl;
+      for(int j = 0; j < qtdFrames ; j++){
+            cout << "j: " << j << endl;
             Mat frame;
-            /*if(!flagSen){
-            sem_wait(&cam);
-            }		
-            pthread_mutex_lock(&mutex1);*/
-            //camera.SalvarFrame(path, "img_" + to_string(i));
-            //cout << ">>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
             
             long long int ini = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();		
             //
@@ -245,7 +222,7 @@ void* chamadaCamera(void* arg){
             auto stop = std::chrono::high_resolution_clock::now();
             //
             long long int fim = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
-            arqCamera.ObjCameraJson(ini, fim, j == quantidadeFrames - 1);
+            arqCamera.ObjCameraJson(ini, fim, j == qtdFrames - 1);
             //
             double elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop-start).count();
             tempos[j] = elapsedTime;
@@ -255,24 +232,20 @@ void* chamadaCamera(void* arg){
             
             frames.push_back(cv::Mat(camera.h,camera.w,CV_8UC3, camera.data));
             
-            if(j == 99){
-                  fimCamera = 1;
-            }
       }
-            
+      fimCamera = 1;
       double soma = 0;
       double dp = 0;
-      for(int i = 0;i<100;i++){			
-            //cout << tempos[i] << endl;
+      for(int i = 0;i<qtdFrames;i++){	
             soma = soma + tempos[i];        
       }
       
-      double media = (soma/100);
-      for(int j = 0; j < 100; j++){		
+      double media = (soma/qtdFrames);
+      for(int j = 0; j < qtdFrames; j++){		
             dp += pow((tempos[j] - media),2);        
       }
       
-      dp = dp/100;
+      dp = dp/qtdFrames;
       dp = sqrt(dp);
       cout << "media dos tempos entre frames em us: " << media << endl;
       cout << "Desvio P. dos tempos entre frames: " << dp << endl;
@@ -280,18 +253,13 @@ void* chamadaCamera(void* arg){
       Arquivo arqTempo(path, "Tempos frame a frame");
       
       printf("Gravando...\n");
-      double tempoGravacao[quantidadeFrames];
+      double tempoGravacao[qtdFrames];
       for(int i = 0; i < frames.size(); i++){
-            
-            //auto inicio = std::chrono::high_resolution_clock::now();
             cvtColor(frames[i], frames[i], 4);
             if(i < 10)
                   imwrite(path + "0" + to_string(i) + ".jpg" ,frames[i]); 
             else  
                   imwrite(path + to_string(i) + ".jpg" ,frames[i]); 
-            //auto fim = std::chrono::high_resolution_clock::now();
-            //cout << TemposGravacao(fim,inicio) << endl;
-            //tempoGravacao[i] = TemposGravacao(fim,inicio);
       
       }
       arqTempo.FimJson();
@@ -362,10 +330,10 @@ void* chamadaSensores(void* arg){
                     }
             }   
             
-            /*
+            
             cout << "i " << contador << ": ";
             cout << buf << endl;
-            contador++;     */
+            contador++;     
 
             leituras.push_back(buf);
             pthread_mutex_unlock(&mutex1);
