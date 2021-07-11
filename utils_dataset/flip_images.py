@@ -238,7 +238,8 @@ class FlipImage(Dataset):
 
         self.new_dataset.sort_values('img_dataset', inplace=True)
         self.new_dataset = self.new_dataset.reset_index(drop=True)
-
+        print(len(self.new_dataset))
+        os.system('pause')
         print("Início")
         for sample in range(self.new_dataset.shape[0]):
             print(self.new_dataset.iloc[sample]['img_dataset'], self.new_dataset.iloc[sample]['img_original'],
@@ -284,7 +285,7 @@ class FlipImage(Dataset):
         # for sample in range(self.dataset.shape[0]):
         if self.normalized_:
             self.createDatasetWithClasses()
-        os.system("pause")
+        # os.system("pause")
         print('Started flipped images to classes 0 and 4')
         for sample in range(self.dataset.shape[0]):
             # print(self.dataset['accx'][sample], Dataset.ConvertLabelsRegress2Classify(self, 1, self.dataset['accx'][sample]))
@@ -332,11 +333,11 @@ class FlipImage(Dataset):
 
 
 dataset_directory = "../../datasets"
-dataset_name = "indoor_dataset_vely_all_out_test"
-raw_dataset_name = "indoor_dataset_vely"
-output_dataset_name = "indoor_dataset_vely_all_out_classes_fliped"
+dataset_name = "market_dataset_y_out_pc"
+raw_dataset_name = "market_dataset_y"
+output_dataset_name = "market_dataset_y_out_pc_classes_flipped"
 
-fliped_dataset_name = "indoor_dataset_vely_all_out_classes_fliped"
+fliped_dataset_name = "market_dataset_y_out_pc_classes_flipped"
 
 flip = FlipImage(dataset_directory, dataset_name, raw_dataset_name, fliped_dataset_name, output_dataset_name)
 flip.Flip()

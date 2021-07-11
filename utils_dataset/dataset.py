@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 class Dataset(object):
 
-    def __init__(self, dataset_dir, dataset_name, dataset_output_dir, output_dataset_name):
+    def __init__(self, dataset_dir, dataset_name, dataset_output_dir, output_dataset_name, joined_datasaet = False):
         self.dataset_dir = dataset_dir
         self.dataset_name = dataset_name
         self.dataset_output_dir = dataset_output_dir
@@ -17,10 +17,18 @@ class Dataset(object):
         self.valSet = None
         self.testSet = None
         self.sets = []
+        self.joined_dataset = joined_datasaet
 
     def loadDataset(self):
-        self.dataset = pd.read_csv(os.path.join(self.dataset_dir, self.dataset_name + ".txt"), sep=" ", engine="python",
-                           encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx'])
+        if not self.joined_dataset:
+            self.dataset = pd.read_csv(os.path.join(self.dataset_dir, self.dataset_name + ".txt"),
+                                       sep=" ", engine="python", encoding="ISO-8859-1",
+                                       names=['img_dataset', 'img_original', 'folder', 'accx'])
+        else:
+            self.dataset = pd.read_csv(os.path.join(self.dataset_dir, self.dataset_name + ".txt"),
+                                       sep=" ", engine="python", encoding="ISO-8859-1",
+                                       names=['img_dataset', 'img_original', 'folder', 'accx', 'dataset',
+                                              'new_img_datset'])
 
     def normalizeDataset(self, method, data, position):
         dataset_temp = self.dataset.copy()

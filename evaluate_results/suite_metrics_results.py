@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class ResultsExperiments():
-    def __init__(self, exps_path, exps, phase, name_weigths, set, num_classes, load_bests=False):
+    def __init__(self, exps_path, exps, phase, name_weigths, set, num_classes, load_bests=False, percent=False):
         self._exps_path = exps_path
         self._exps = exps
         self._array_raw_exps = []
@@ -19,6 +19,7 @@ class ResultsExperiments():
         self._best_exps = {}
         self._best_results = {}
         self._load_best_models = load_bests # Means that load weights are the best fo all models
+        self.percent = percent
 
     def load_results_file(self):
         """
@@ -259,6 +260,19 @@ class ResultsExperiments():
         self.recall()
         self.f1_score()
 
+    def confusion_matrix_as_percentage(self, array):
+        percent_matrix = []
+        # print(array, len(array))
+
+        for i in range(len(array)):
+            a = sum(array[i])
+            per = []
+            for j in range(len(array[0])):
+                per.append(array[i][j]/a)
+            percent_matrix.append(per)
+        return np.array(percent_matrix)
+
+
     def generate_statistics(self):
         """
         Generate all results of statistics and get best model
@@ -279,7 +293,10 @@ class ResultsExperiments():
         print("Exp {0}".format(self._exps[best_model["index"]]))
         print("------ Accuracy -------")
         print("Accuracy -> {0}".format(best_model["max_value"]))
-        print(self._all_confusion_matrix[best_model["index"]])
+        if self.percent:
+            print(self.confusion_matrix_as_percentage(self._all_confusion_matrix[best_model["index"]]))
+        else:
+            print(self._all_confusion_matrix[best_model["index"]])
         print("------ Precision -------")
         self.print_metric_by_class(self._all_precision[best_model["index"]])
         print("Mean precision -> {0}".format(np.mean(self._all_precision[best_model["index"]])))
@@ -388,13 +405,36 @@ vgg16_indoor_accy_flipped_232_pc_dataset = [192, 193, 218, 219, 220, 221, 222, 2
 resnet50_indoor_accy_flipped_232_pc_dataset = [196, 197, 210, 211, 212, 213, 214, 215, 216, 217]
 dronet_indoor_accy_flipped_232_pc_dataset = [200, 201, 242, 243, 244, 245, 246, 247, 248, 249]
 
+# trasnfer learning with all datasets > 5k images
+vgg16_sidewalk_all_datasets_velx = [280]
+dronet_sidewalk_all_datasets_velx = [281]
+resnet_sidewalk_all_datasets_velx = [282]
+
+vgg16_sidewalk_all_datasets_vely  = [283]
+resnet_sidewalk_all_datasets_vely = [284]
+dronet_sidewalk_all_datasets_vely = [285]
+
+# transfer learning with supermarket all dataset
+vgg16_market_all_datasets_velx = []
+resnet_market_all_datasets_velx = [287]
+dronet_market_all_datasets_velx = [288]
+
+vgg16_market_all_datasets_vely = [289]
+resnet_market_all_datasets_vely = [290]
+dronet_market_all_datasets_vely = [291]
+
+# ======== new dataset ============
+vgg16_sidewalk_accy_y_all_datasets_new_vely_1446 = [286]
+vgg16_sidewalk_accy_y_all_datasets_new_vely_1222 = [285]
+vgg16_sidewalk_accy_y_all_datasets_new_vely_900 = [287]
+
 set = "test"
 exps_phase = "test"
 name_weights = "model_weights_99.h5" # dronet 299
 num_classes = 5
 
-res = ResultsExperiments(exps_path, resnet50_sidewalk_accx_184_pc_dataset , exps_phase, name_weights, set, num_classes, load_bests=False)
-res.get_results_log(resnet50_sidewalk_accx_184_pc_dataset ) # Get results to print.
+res = ResultsExperiments(exps_path, vgg16_sidewalk_all_datasets_vely , exps_phase, name_weights, set, num_classes, load_bests=False, percent=False)
+# res.get_results_log(vgg16_sidewalk_all_datasets_vely ) # Get results to print.
 # res.print_best_result() # Print metrics log of experiments
 # res.print_best_exps(metric="val_loss") # Print best model each exp
 res.generate_statistics()

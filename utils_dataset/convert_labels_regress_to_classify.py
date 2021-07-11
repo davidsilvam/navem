@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-dataset_name = 'indoor_dataset_vely_all_out'
-dataset_name_out = 'indoor_dataset_vely_all_out_classes'
+dataset_name = 'market_dataset_y_out_pc'
+dataset_name_out = 'market_dataset_y_out_pc_classes'
 data_type = 'train'
 network = 'vgg16'
 

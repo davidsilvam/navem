@@ -5,12 +5,12 @@ import numpy as np
 flag_classification = True
 phase = "test"
 set = "train"
-exp = "exp_198"
+exp = "exp_280"
 name_weights = "model_weights_99.h5" # weights_500.h5 model_weights_499.h5
 
 # From test separated predict
 name_file_predict = "trained_indoor_predict_sidewalk_accx_00"
-separated = True
+separated = False
 
 max = 1
 
