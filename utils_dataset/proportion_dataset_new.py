@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import random
+from file import File
 
 class RawDataset(object):
 
@@ -24,6 +25,8 @@ class RawDataset(object):
             dataset_temp['accx'] = (data['accx'] - data['accx'].min()) / (data['accx'].max() - data['accx'].min())
         elif method == 'std_mean':
             dataset_temp['accx'] = (data['accx'] - np.mean(data['accx']))/np.std(data['accx'])
+        elif method == 'none':
+            dataset_temp['accx'] = data['accx']
         self.dataset_normalized = dataset_temp
 
     def saveDatasetProportion(self, array, original):
@@ -39,7 +42,9 @@ class RawDataset(object):
                     array["folder"][i]) + " " + str(array["accx"][i]) + "\n")
         file.close()
         print("Saved.")
-
+    def saveAllData(self, array):
+        dataset_file = File(os.path.join(self.dataset_dir))
+        dataset_file.saveFileAllDataset(array, self.output_dataset_name)
 
 class Proportion(object):
 
@@ -63,6 +68,9 @@ class Proportion(object):
         else:
             for c in self.classes:
                 print("Class {0} -> {1}".format(c, self.getProportionByClass(self.dataset, c, False)))
+        # print(self.dataset_normalized)
+        # print(min(self.dataset['accx']))
+        # print(max(self.dataset['accx']))
 
     def getProportionByClass(self, array, cla, percent):
         c = [0, 0, 0, 0, 0]
@@ -116,26 +124,34 @@ class Proportion(object):
 
     def makeProportionAdded(self):
         RawDataset.loadDataset(self)
-        RawDataset.normalizeDataset(self, 'zero_one', self.dataset, 3)
+        RawDataset.normalizeDataset(self, 'none', self.dataset, 3)
         self.dataset_normalized_added = pd.DataFrame(columns=self.dataset_normalized.columns)
-        qtd_data = [130, 130, 130, 130, 130]
+        qtd_data = [1380, 1380, 1380, 1380, 1380]
         # qtd_data = [3862, 2474, 813, 850, 1088]
         for c in self.classes:
             m = {}
-            if (c == 0):
-                m = (self.dataset_normalized['accx'] > 0) & (self.dataset_normalized['accx'] <= (self.max / 5))
+            if (c == 0): # Wargning
+                # m = (self.dataset_normalized['accx'] > 0) & (self.dataset_normalized['accx'] <= (self.max / 5))
+                m = (self.dataset_normalized['accx'] == 0)#alterei aqui
             elif (c == 1):
-                m = (self.dataset_normalized['accx'] > self.max / 5) & (
-                            self.dataset_normalized['accx'] <= (self.max / 5) * 2)
+                # m = (self.dataset_normalized['accx'] > self.max / 5) & (
+                #             self.dataset_normalized['accx'] <= (self.max / 5) * 2)
+                m = (self.dataset_normalized['accx'] == 1)
             elif (c == 2):
-                m = (self.dataset_normalized['accx'] > (self.max / 5) * 2) & (
-                            self.dataset_normalized['accx'] <= (self.max / 5) * 3)
+                # m = (self.dataset_normalized['accx'] > (self.max / 5) * 2) & (
+                #             self.dataset_normalized['accx'] <= (self.max / 5) * 3)
+                m = (self.dataset_normalized['accx'] == 2)
             elif (c == 3):
-                m = (self.dataset_normalized['accx'] > (self.max / 5) * 3) & (
-                            self.dataset_normalized['accx'] <= (self.max / 5) * 4)
+                # m = (self.dataset_normalized['accx'] > (self.max / 5) * 3) & (
+                #             self.dataset_normalized['accx'] <= (self.max / 5) * 4)
+                m = (self.dataset_normalized['accx'] == 3)
             elif (c == 4):
-                m = (self.dataset_normalized['accx'] > (self.max / 5) * 4)
+                # m = (self.dataset_normalized['accx'] > (self.max / 5) * 4)
+                m = (self.dataset_normalized['accx'] == 4)
             dataset_current_class = self.dataset_normalized[m]
+            # print(dataset_current_class)
+            # print(len(dataset_current_class))
+            # os.system('pause')
 
             ab = 0
             # if(len(dataset_current_class) < self.quantity):
@@ -149,11 +165,13 @@ class Proportion(object):
                 ab = random.sample(range(len(dataset_current_class)), len(dataset_current_class))
             print(len(ab), len(dataset_current_class))
             for sample in ab:
+                # print(dataset_current_class.iloc[sample])
+                # os.system('pause')
                 self.dataset_normalized_added = self.dataset_normalized_added.append(dataset_current_class.iloc[sample])
 
         self.dataset_normalized_added.reset_index(drop=True, inplace=True)
         self.printProportionAllClasses(self.dataset_normalized_added)
-        RawDataset.saveDatasetProportion(self, self.dataset_normalized_added, original=False)
+        RawDataset.saveAllData(self, self.dataset_normalized_added)#alterei aqui
 
     def makeProportion(self):
         RawDataset.loadDataset(self)
@@ -203,11 +221,11 @@ class Proportion(object):
         RawDataset.saveDatasetProportion(self, self.dataset_normalized, original=False)
 
 dataset_directory = "../../datasets"
-dataset_name = "sidewalk_accy_all_datasets_classes_new_900"
-output_dataset_name = "market_dataset_y_out_pc"
-quantity_per_class = 927
+dataset_name = "market_dataset_2_x"
+output_dataset_name = "market_dataset_2_y_proportional"
+quantity_per_class = 258
 
 proportion = Proportion(dataset_directory, dataset_name, dataset_directory, output_dataset_name, quantity_per_class)
 # proportion.makeProportion()
-# proportion.makeProportionAdded()
-proportion.printProportional(normalize=False, print_normalized=False)
+#proportion.makeProportionAdded()
+proportion.printProportional(normalize=True, print_normalized=True)

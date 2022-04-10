@@ -57,16 +57,16 @@ class UtilDataset(object):
 
 
 dataset_dir = "../../datasets"
-output_dataset_name = "sidewalk_accy_all_datasets_classes" # file in
-img_name = "006249.jpg"
+output_dataset_name = "sidewalk_accx_all_out_classes" # file in
+img_name = "004565.jpg"
 out_path_resize = r"C:\Users\david\OneDrive\Mestrado\SIBGRAPI"
-path_dataset = "indoor_dataset_velx_out_pc_classes" # path out save images
+path_dataset = "sidewalk_accx_all_out_classes" # path out save images
 dimension = (300, 300)
 
 
-dataset_name = "sidewalk_accy_all_datasets_classes_00" # path where images is
+dataset_name = "sidewalk_accy_all_datasets_classes_00" # path where images are
 network = "vgg16"
 
 a = UtilDataset(img_name, path_dataset, dimension, out_path_resize, dataset_dir, output_dataset_name, dataset_name, network)
-# a.resize()
-a.makeDatasetImagesFirstResize() # Create folder with all images dataset
+a.resize()
+# a.makeDatasetImagesFirstResize() # Create folder with all images dataset

@@ -104,12 +104,23 @@ class Similarity(object):
                 elif not combinations_[sample][1] in mem:
                     final_result.append(subset.iloc[combinations_[sample][1]])
                     mem.append(combinations_[sample][1])
-                if len(mem) >= add:
+                if len(mem) >= (len(subset) - add):
                     break
+        # print(subset_in)
+        # print(result_array)
         # print(index_result)
         # print(combinations_)
         # print(mem)
+        # print(len(subset))
+        # print((len(subset) - add))
+        ### print
+        # for c, res in zip(combinations_, result_array):
+        #     print("{0} = {1:.4f}".format(c, res))
+        ###end print
+        # print(mem)
+        # print(final_result)
         # print(len(final_result), len(mem))
+        # print(len(mem))
         # os.system('pause')
         return final_result
 
@@ -121,8 +132,8 @@ class Similarity(object):
         new_dataset = pd.DataFrame(columns=dataset.dataset.columns)
         # print(dataset.dataset[self.getSamplesByClasses(dataset.dataset, 0)][0:10])
         # print('asdf')
-        multiple = 5
-        add = 2
+        multiple = 4
+        add = 1 #rem?
         for classes in range(5):
             filter_class = dataset.dataset[self.getSamplesByClasses(dataset.dataset, classes)]
             # new_dataset.append(filter_class.iloc[0])
@@ -149,21 +160,17 @@ class Similarity(object):
         f.saveFileAllDataset(new_dataset, self.output_dataset_name)
 
 
-
-
-
-
 dataset_dir = '../../datasets'
-dataset_name = 'sidewalk_accy_all_datasets_classes'
-output_dataset_name = 'sidewalk_accy_all_datasets_classes_new_900'
-img1_name = '000041.jpg'
-img2_name = '000091.jpg'
+dataset_name = 'sidewalk_accx_all_datasets_classes'
+output_dataset_name = 'sidewalk_accx_all_datasets_classes_new_4023_4_1'
+img1_name = '000003.jpg'
+img2_name = '000004.jpg'
 img1 = cv2.imread(os.path.join(dataset_dir, dataset_name, img1_name))
 img2 = cv2.imread(os.path.join(dataset_dir, dataset_name, img2_name))
 img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 test = Similarity(dataset_dir, dataset_name, dataset_dir, output_dataset_name)
-print(test.mse(img1, img2))
-print(ssim(img1, img2))
+# print(test.mse(img1, img2))
+# print(ssim(img1, img2))
 
 test.makeNewDataset()

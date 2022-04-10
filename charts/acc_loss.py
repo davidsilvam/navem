@@ -9,18 +9,18 @@ import os
 #"exp_025"
 #"exp_026"
 #
-vgg16 = ["exp_280"]#side, inner, external
-names = ["vgg16"]
+vgg16 = ["exp_372"]#side, inner, external
+names = ["VGG16"]
 exp_name = vgg16
 #data = pd.read_csv("/home/david/Área de Trabalho/navem_keras/experiments/" + exp_name + "/log.txt", sep="\t", engine="python", encoding="ISO-8859-1", header=None)
 
 #plt.ylim(-2, 2)
 
-show_loss = False
-show_acc = True
+show_loss = True
+show_acc = False
 
 for exp, name in zip([vgg16], names):
-    plt.figure("vgg16")
+    plt.figure("Dronet")
 
     for i in enumerate(exp):
         dir = "./../../experiments/" + i[1]
@@ -43,13 +43,13 @@ for exp, name in zip([vgg16], names):
         if(show_acc):
             plt.plot(timesteps, acc, 'r-', timesteps, val_acc, 'b-')
         if(show_loss):
-            plt.legend(["Training loss", "Validation loss"])
-            plt.ylabel('Loss')
-            plt.xlabel('Epochs')
+            plt.legend(["Erro treinamento", "Erro validação"])
+            plt.ylabel('RMSE')
+            plt.xlabel('Épocas')
         if(show_acc):
             plt.legend(["Accuracy train", "Accuracy val"])
-            plt.ylabel('Accuracy')
-            plt.xlabel('Epochs')
+            plt.ylabel('Acurácia')
+            plt.xlabel('Épocas')
 
 plt.show()
 #print(len(data))

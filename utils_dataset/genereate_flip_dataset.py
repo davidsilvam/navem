@@ -53,8 +53,13 @@ class Generate(object):
                 for sample in range(len(folder[1])):#len(folder[1])
                     # print(folder[1]['img_dataset'].iloc[sample])
                     if not self.check(aux_dataset, folder[1]['accx'].iloc[sample]) or repeted:
+                        # print(folder[1]['dataset'].iloc[sample])
+                        # print(folder[1])
+                        # os.system('pause')
                         path_img = os.path.join(self.dataset_dir, folder[1]['dataset'].iloc[sample],
                                                 folder[1]['img_dataset'].iloc[sample])
+
+
                         # print(path_img, os.path.exists(path_img))
                         # os.system('pause')
                         if os.path.exists(path_img or self.copy_flag):
@@ -83,14 +88,16 @@ class Generate(object):
                 print('pass train')
             aux_dataset = pd.DataFrame(aux_dataset)
             aux_dataset = aux_dataset.sort_index()
+            aux_dataset = aux_dataset.sort_values(by=['new_img_datset'])
             aux_dataset = aux_dataset.reset_index(drop=True)
+
             # print(aux_dataset)
             # os.system('pause')
             dataset_file.saveFile2(aux_dataset, folder)
 
     def generate(self):
         self.makeDirDataset()
-        Dataset.splitDataset(self, 0.7, 0.15, 0.15)
+        Dataset.splitDataset(self, 0.7, 0.15, 0.15, flipped=True)
         for folder in zip(self.folders, self.sets):
             aux_dataset = []
             print("Initialized -> ", folder[0])
@@ -114,20 +121,20 @@ class Generate(object):
                     # os.system("pause")
             dataset_file.saveFile(aux_dataset, folder)
 
-for i in range(0, 1):
+for i in range(1, 5):
 #dataset accx -> sidewalk_accx_all_out_classes -> sidewalk_accx_184_pc_dataset_" + str(i)
 #dataset accy -> sidewalk_accy_proportion_classes_fliped_3 -> sidewalk_accy_315_pc_dataset_" #+ str(i)
 #dataset accy no flipped -> sidewalk_accy_all_out_classes -> sidewalk_accy_158_pc_dataset_" + str(i)
     dataset_directory = "../../datasets"
-    dataset_name = "sidewalk_accy_all_datasets_classes_new_900"
+    dataset_name = "market_dataset_2_y_proportional_flipped_classes_all"
     # datasets_names_files = ['sidewalk_accx_all_out_classes', 'sidewalk_dataset_x_out_pc_classes', 'plus_sidewalk_dataset_x_out_pc_classes']
     if i < 10:
-        output_dataset_name = "sidewalk_accy_all_datasets_classes_new_900_0" + str(i)
+        output_dataset_name = "market_dataset_2_y_proportional_flipped_classes_all_0" + str(i)
     else:
-        output_dataset_name = "sidewalk_accy_all_datasets_classes_new_900_" + str(i)
-    network_name = "vgg16"
+        output_dataset_name = "market_dataset_2_y_proportional_flipped_classes_all_" + str(i)
+    network_name = "dronet"
 
-    dimension = (224, 224)
+    dimension = (200, 200)
 
     resize = True#Must be True always, False is exception
     repeted = True

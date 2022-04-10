@@ -3,32 +3,32 @@ import pandas as pd
 import random
 import numpy as np
 
-name = os.path.join('./../../datasets', 'indoor_dataset_velx_vely.txt')
+name = os.path.join('./../../datasets', 'market_dataset_2_xy.txt')
 
 df = pd.read_csv(name, sep=" ", engine="python", encoding="ISO-8859-1", header=None, names=['img_dataset', 'img_original', 'folder', 'x', 'y'])
 
-begin = 0
-end = 19
+begin = 2119
+end = 2131
 vel_variation = {}
-vel_variation['x'] = [0, 3] # -2, 200 min max
-vel_variation['y'] = [-0.08, 0.08] # -0.1, 0.1 min max
+vel_variation['x'] = [0, 1.5] # -2, 200 min max
+vel_variation['y'] = [-0.08, 0.08] # -0.1, 0.1 min max default 0.08
 
-# =======   x     y   ====
+# =======   x     y   ====ca
 # ======= Cres  = True; Decre = False
-states = {'x': False, 'y': True}
-statics = {'x': False, 'y': True}
+states = {'x': False, 'y': False}
+statics = {'x': False, 'y': True}# True Se manter
 
 # vel_y
 #
 # esq -
 # dir +
 #
-# min -1.2
-# max 1.2
+# min -2.5
+# max 2.5
 #
 # vel_x
 #
-# max 1.2
+# max 1.5
 # min 0.0
 
 # cres_decres = False # False True

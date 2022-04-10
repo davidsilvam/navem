@@ -2,11 +2,11 @@ import os
 import pandas as pd
 import numpy as np
 
-flag_classification = True
+flag_classification = False
 phase = "test"
-set = "train"
-exp = "exp_280"
-name_weights = "model_weights_99.h5" # weights_500.h5 model_weights_499.h5
+set = "test"
+exp = "exp_480"
+name_weights = "model_weights_199.h5" # weights_500.h5 model_weights_499.h5
 
 # From test separated predict
 name_file_predict = "trained_indoor_predict_sidewalk_accx_00"

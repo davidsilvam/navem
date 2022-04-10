@@ -6,8 +6,8 @@ from datetime import date
 import cv2 as cv
 import os
 
-dataset_directory = "./../datasets"
-o_dataset_name = "2020_06_25-16_49_23"
+dataset_directory = "./../../datasets"
+o_dataset_name = "demonstrate_market_dataset_y_out_classes"
 network = "vgg16"
 
 dim = (224, 224)
@@ -15,8 +15,8 @@ dim = (224, 224)
 resize = True#Must be True always, False is exception
 repeted = True
 round_sample = -1
-dataset_name = "2020_06_25-16_49_23"
-dataset_name_case = "2020_06_25-16_49_23"
+dataset_name = "demonstrate_market_dataset_y_out_classes"
+dataset_name_case = "demonstrate_market_dataset_y_out_classes"
 
 if not os.path.exists(os.path.join(dataset_directory, network, o_dataset_name)):
     os.makedirs(os.path.join(dataset_directory, network, o_dataset_name))
@@ -39,7 +39,7 @@ min_max_array.append(getMinMax(data, 1))#acc_y. Muste be 2, or others
 ##data[:,1] = data[:,1].astype(float)
 ##data[:,2] = (data[:,2] - np.mean(data[:,2]))/np.std(data[:,2])#normalize (x - media) / desvio padrao
 ##data[:,2] = data[:,2].astype(float)
-data[:,3] = (data[:,3]-data[:,3].min())/(data[:,3].max()-data[:,3].min())#Nomalize
+##data[:,3] = (data[:,3]-data[:,3].min())/(data[:,3].max()-data[:,3].min())#Nomalize
 
 #trainingSet, testSet = train_test_split(data, test_size=0.3)
 testSet = data.copy()

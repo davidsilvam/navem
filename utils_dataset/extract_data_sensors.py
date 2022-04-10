@@ -6,10 +6,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-begin = 370
-end = 1900
+begin = 10460
+end = 11500
 
-video_name = "2021_04_03-08_28_10"
+video_name = "PilotGuru-V2"
 video_directory = "./../../raw_datasets_videos"
 images_directory = "./../../raw_datasets_images"
 
@@ -155,8 +155,7 @@ df_acc = fill(accJson, "accelerations")
 df_gyro = fill(gyroJson, "rotations")
 df_cam = fill(camJson, "frames")
 
-getLabels(df_gyro, df_acc, df_cam, begin, end, 8, 50, 1)#step=3
-
+getLabels(df_gyro, df_acc, df_cam, begin, end, 8, 50, step_fps = 3)#step=3
 
 ##acc = moving_avg(turnReferenceTime(df_acc), 50)
 ##gyro = turnReferenceTime(df_gyro)

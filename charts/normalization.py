@@ -4,10 +4,10 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 ##import scipy.stats as stats
-##import pylab as pl
+import pylab as pl
 
 dataset_directory = "./../../datasets"
-o_dataset_name = "sidewalk_dataset_x"
+o_dataset_name = "market_dataset_2_x"
 
 data = pd.read_csv(os.path.join(dataset_directory, o_dataset_name + ".txt"), sep=" ", engine="python", encoding="ISO-8859-1", header=None).values
     

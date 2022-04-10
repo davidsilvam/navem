@@ -1,7 +1,7 @@
 import cv2
 import os
 
-video_name = "2020_06_25-16_49_23"
+video_name = "PilotGuru-V2"
 video_directory = "./../../raw_datasets_videos"
 images_directory = "./../../raw_datasets_images"
 
@@ -16,7 +16,19 @@ success, image = vidcap.read()
 count = 0
 while success:
     image_rotate_90_clockwise = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
-    cv2.imwrite(os.path.join(images_directory, video_name, "%d.jpg" % count), image_rotate_90_clockwise)#save frame as JPEG file
+    #print(image_rotate_90_clockwise.shape[0], image_rotate_90_clockwise.shape[1])
+    h = image_rotate_90_clockwise.shape[0]
+    w = image_rotate_90_clockwise.shape[1]
+    x = 0
+    y = 216
+    crop_img = image_rotate_90_clockwise[y:y + h, x:x + w]
+    #cv2.imshow("cropped", crop_img)
+    #cv2.imshow("cropped", image_rotate_90_clockwise)
+    #cv2.waitKey(0)
+
+    #os.system('pause')
+
+    cv2.imwrite(os.path.join(images_directory, video_name, "%d.jpg" % count), crop_img)#save frame as JPEG file
     success, image = vidcap.read()
     print ('Save frame: ', count)
     count += 1

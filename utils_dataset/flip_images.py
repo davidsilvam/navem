@@ -28,7 +28,7 @@ class Dataset(object):
 
     def LoadRawDataset(self):
         self.raw_dataset = pd.read_csv(os.path.join(self.dataset_dir, self.raw_dataset_name + ".txt"), sep=" ", engine="python",
-                           encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx'])
+                           encoding="ISO-8859-1", names=['img_dataset', 'img_original', 'folder', 'accx', 'accy', 'accz'])
 
     def AppendSampleNewDataset(self, sample, raw_sample):
         search = self.raw_dataset.loc[(self.raw_dataset['img_dataset'] == raw_sample)]
@@ -220,6 +220,9 @@ class FlipImage(Dataset):
         self.CreateDir()
         Dataset.LoadDataset(self)
         Dataset.LoadRawDataset(self)
+        # print(self.raw_dataset)
+        # print(self.raw_dataset.iloc[self.raw_dataset.shape[0] - 1]['img_dataset'])
+        # os.system('pause')
         self.last_file_name = int(self.raw_dataset.iloc[self.raw_dataset.shape[0] - 1]['img_dataset'].split('.')[0])
 
         # print(self.last_file_name)
@@ -333,11 +336,11 @@ class FlipImage(Dataset):
 
 
 dataset_directory = "../../datasets"
-dataset_name = "market_dataset_y_out_pc"
-raw_dataset_name = "market_dataset_y"
-output_dataset_name = "market_dataset_y_out_pc_classes_flipped"
+dataset_name = "market_dataset_2_y_proportional"
+raw_dataset_name = "market_dataset_2_y"
+output_dataset_name = "market_dataset_2_y_proportional_flipped"
 
-fliped_dataset_name = "market_dataset_y_out_pc_classes_flipped"
+fliped_dataset_name = "market_dataset_2_y_proportional_flipped" # folder name
 
 flip = FlipImage(dataset_directory, dataset_name, raw_dataset_name, fliped_dataset_name, output_dataset_name)
 flip.Flip()

@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-dataset_name = 'market_dataset_y_out_pc'
-dataset_name_out = 'market_dataset_y_out_pc_classes'
+dataset_name = 'market_dataset_2_x_proportional'
+dataset_name_out = 'market_dataset_2_x_proportional_classes'
 data_type = 'train'
 network = 'vgg16'
 

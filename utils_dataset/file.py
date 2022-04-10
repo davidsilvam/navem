@@ -16,7 +16,21 @@ class File(object):
     def saveFile2(self, dataset, folder):
         self.file = open(os.path.join(self.path, "gyro.txt"), "w")
         for sample in range(len(dataset)):
+            print(folder[0])
+            os.system('pause')
             self.file.write(folder[0] + "/" + dataset['new_img_datset'].iloc[sample] + " " + str(dataset['accx'].iloc[sample]) + "\n")
+            # print(folder[0] + "/" + sample[0][:] + " " + str(sample[3]) + "\n")
+        self.file.close()
+        print("File saved")
+
+    def saveRegress(self, dataset, folder):
+        self.file = open(os.path.join(self.path, "gyro.txt"), "w")
+        #print(dataset)
+        for sample in range(len(dataset)):
+            #print(folder + "/" + dataset['new_img_datset'].iloc[sample] + " " + str(dataset['accx'].iloc[sample]) + "\n")
+            #print(str(dataset['accx'].iloc[sample].values))
+            #os.system('pause')
+            self.file.write(dataset['new_img_datset'].iloc[sample] + " " + str(dataset['accx'].iloc[sample].values[0]) + "\n")
             # print(folder[0] + "/" + sample[0][:] + " " + str(sample[3]) + "\n")
         self.file.close()
         print("File saved")
@@ -30,5 +44,6 @@ class File(object):
                             dataset['folder'].iloc[sample] + " " +
                             str(dataset['accx'].iloc[sample]) + " " +
                             dataset['dataset'].iloc[sample] + " " +
-                            dataset['new_img_datset'].iloc[sample] + "\n")
+                            dataset['new_img_datset'].iloc[sample] + " " +
+                            str(dataset['flipped'].iloc[sample]) + "\n")
         self.file.close()

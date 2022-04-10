@@ -6,8 +6,8 @@ import os
 # videofiles = [n for n in os.listdir('.') if n[0]=='c' and n[-4:]=='.mp4']
 # videofiles = sorted(videofiles, key=lambda item: int( item.partition('.')[0][3:]))
 
-video_name = '2020_06_25-16_49_23'
-path = os.path.join('./../')
+video_name = 'demonstrate_market_dataset_y_out_classes'
+path = os.path.join('./../../')
 
 videofiles = [n for n in os.listdir(path) if n[-4:] == '.avi']
 
@@ -32,8 +32,9 @@ cap = cv2.VideoCapture(videofiles[0])
 # fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 # out = cv2.VideoWriter('cutout.mp4', fourcc, 20, (640, 480))
 
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter(os.path.join('./../', video_name + '.avi'), fourcc, 30.0, (2160, 3840))
+fourcc = cv2.VideoWriter_fourcc(*'XVID')# estava XVID
+dim = (2160, 3840)
+out = cv2.VideoWriter(os.path.join('./../../', video_name + '.avi'), fourcc, 30.0, dim)
 
 while(cap.isOpened()):
     ret, frame = cap.read()
